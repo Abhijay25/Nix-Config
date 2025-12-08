@@ -20,6 +20,9 @@ binds {
 	Mod+T { spawn "alacritty"; }
 	Mod+A { spawn "rofi" "-show" "drun"; }
 
+	// Moving Workspace
+	Mod+1 { focus-workspace 1; }
+
 	// Switching Workspaces
 	Mod+Shift+1 { move-column-to-workspace 1; }
 	Mod+Shift+2 { move-column-to-workspace 2; }
@@ -48,6 +51,31 @@ binds {
 
 	// Snap to Center
 	Alt+Shift+Return { center-column; }
+
+	// Floating Windows
+	Mod+Shift+F { toggle-window-floating; }
+	Mod+Tab { switch-focus-between-floating-and-tiling; }
+
+	// Consume & Expel
+	Mod+BracketLeft { consume-or-expel-window-right; }
+	Mod+BracketRight { consume-or-expel-window-left; }
+	Mod+Shift+BracketLeft { consume-window-into-column; }
+	Mod+Shift+BracketRight { expel-window-from-column; }
+
+	// Overview
+	Mod+O { toggle-overview; }
+
+	// Switch to Workspace
+	Mod+U { focus-workspace-down; }
+	Mod+I { focus-workspace-up; }
+
+	// Move Window to Workspace
+	Mod+Shift+U { move-column-to-workspace-down; }
+	Mod+Shift+I { move-column-to-workspace-up; }
+
+	// Cycle Window Size
+	Mod+R {switch-preset-column-width; }
+
 }
 
 layout {
@@ -62,6 +90,17 @@ layout {
 
 	border {
 		off
+	}
+
+	// Default Window Proportion
+	default-column-width { proportion 0.5; }
+
+	// Window Proportion Presets
+	preset-column-widths {
+		proportion 0.3333
+		proportion 0.5
+		proportion 0.666
+		proportion 1.00
 	}
 }
 
