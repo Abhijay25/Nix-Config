@@ -1,10 +1,15 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
 	home.username = "abhijay";
 	home.homeDirectory = "/home/abhijay";
 	programs.git.enable = true;
 	home.stateVersion = "25.11";
+
+	imports = [
+		./noctalia.nix
+	];
+
 	programs.bash = {
 		enable = true;
 		shellAliases = {
@@ -18,14 +23,58 @@
 		};
 	};
 
-	# home.file.".config/niri/config.kdl".source = ./configs/niri/config.kdl;
+	programs.vim = {
+		enable = true;
+
+		plugins = with pkgs.vimPlugins; [
+			vim-nix
+			auto-pairs
+			vim-lastplace
+		];
+		
+		extraConfig = ''
+			" Visuals
+			set number
+			syntax on
+
+			" Indentation
+			set autoindent
+			set smartindent
+
+			" Tabs & Spaces
+			set expandtab
+			set tabstop=2
+			set shiftwidth=2
+
+			" Searching
+			set ignorecase
+			set smartcase
+		'';
+	};
+
 	home.packages = with pkgs; [
-		neovim
-		ripgrep
-		nil
+		# System
+		gcc
 		nixpkgs-fmt
 		nodejs
-		gcc
-		rofi
+		ripgrep
+    rofi
+
+    # Quality of Life
+    brightnessctl
+    libnotify
+    pamixer
+    playerctl
+
+		# Editor & LSP
+		neovim
+		nil
+
+		# Ricing
+		fastfetch
+    google-fonts
+    swww
+		roboto
+		quickshell
 	];
 }

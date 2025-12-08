@@ -6,9 +6,15 @@
 			url = "github:nix-community/home-manager/master";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+
+		noctalia = {
+			url = "github:noctalia-dev/noctalia-shell";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
+		
 	};
 
-	outputs = {self, nixpkgs, home-manager, ...} : {
+	outputs = inputs@{self, nixpkgs, home-manager, ...} : {
 		nixosConfigurations.doge = nixpkgs.lib.nixosSystem {
 			system = "x86_64-linux";
 			modules = [
@@ -18,6 +24,7 @@
 					home-manager = {
 						useGlobalPkgs = true;
 						useUserPackages = true;
+						extraSpecialArgs = { inherit inputs; };
 						users.abhijay = import ./home.nix;
 						backupFileExtension = "backup";
 					};

@@ -32,17 +32,23 @@
   # Enable Niri
   programs.niri.enable = true;
 
+  # Power Management
+  services.upower.enable = true;
+  services.power-profiles-daemon.enable = true;
+
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Enable sound.
-  # services.pulseaudio.enable = true;
-  # OR
-  # services.pipewire = {
-  #   enable = true;
-  #   pulse.enable = true;
-  # };
+   # Enable sound
+   security.rtkit.enable = true;
+   services.pipewire = {
+     enable = true;
+     pulse.enable = true;
+     alsa.enable = true;
+     alsa.support32Bit = true;
+     jack.enable = true;
+   };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
