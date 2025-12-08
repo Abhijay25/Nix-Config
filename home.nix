@@ -9,7 +9,7 @@
 		enable = true;
 		shellAliases = {
 			btw = "echo I use NixOS btw";
-			nrs = "sudo nixos-rebuild switch --flake /dotfiles#doge";
+			nrs = "sudo nixos-rebuild switch --flake ~/dotfiles#doge";
 			
 			# Shortcut Aliases
 			nc = "sudo vim /dotfiles/configurations.nix";
@@ -18,13 +18,7 @@
 		};
 	};
 
-	programs.git = {
-		enable=true;
-		userName = "Abhijay";
-		userEmail = "abhijay3852@gmail.com";
-	}
-	
-	home.file".config/niri/config.kdl".source = ./configs/niri/config.kdl;
+	home.file.".config/niri/config.kdl".source = ./configs/niri/config.kdl;
 	home.packages = with pkgs; [
 		neovim
 		ripgrep
@@ -32,6 +26,6 @@
 		nixpkgs-fmt
 		nodejs
 		gcc
-		rofi-wayland
+		rofi
 	];
 }
