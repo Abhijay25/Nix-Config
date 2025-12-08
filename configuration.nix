@@ -26,9 +26,38 @@
 	autoRepeatInterval = 35;
   };
 
-  # Display Manager Ly
-  services.displayManager.ly.enable = true;
+  # Hide Bootloader & Wall of Text on Boot
+  boot.loader.timeout = 0;
+  boot.plymouth.enable = true;
 
+  # Silence Kernel Text on Boot
+  boot.consoleLogLevel = 0;
+  boot.initrd.verbose = false;
+  boot.kernelParams = [
+    "quiet"
+    "splash"
+    "boot.shell_on_fail"
+    "logLevel=3"
+    "rd.systemd.show_status=false"
+    "rd.udev.log_level=3"
+    "udev.log_priority=3"
+  ];
+
+  #Login Screen
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;
+    package = pkgs.kdePackages.sddm;
+    theme = "sddm-astronaut-theme";
+
+    extraPackages = with pkgs.kdePackages; [
+      qtmultimedia
+      qtsvg
+      qtvirtualkeyboard
+      qt5compat
+    ];
+  };
+  
   # Enable Niri
   programs.niri.enable = true;
 
@@ -70,6 +99,16 @@
     git
     vim
     wget
+
+    (sddm-astronaut.override {
+      themeConfig = {
+        MainColor = "#ffbbbd";
+        AccentColor = "#ffbbbd";
+
+        showPowerButton = "true";
+      };
+      embeddedTheme = "pixel_sakura";
+    })
   ];
 
   fonts.packages = with pkgs; [

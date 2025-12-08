@@ -2,6 +2,10 @@ prefer-no-csd
 spawn-at-startup "noctalia-shell"
 spawn-at-startup "swww-daemon"
 
+hotkey-overlay {
+  skip-at-startup
+}
+
 input {
 	focus-follows-mouse max-scroll-amount="0%"
 
@@ -117,4 +121,8 @@ layout {
 window-rule {
 	geometry-corner-radius 4
 	clip-to-geometry true
+}
+
+animations {
+  slowdown 0.5
 }
