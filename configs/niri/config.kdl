@@ -1,18 +1,71 @@
+prefer-no-csd
+
 input {
+	focus-follows-mouse max-scroll-amount="0%"
+
 	keyboard {
 		xkb { layout "us"; }
+		repeat-delay 200
+		repeat-rate 35
 	}
+
 	touchpad { tap; }	
 }
 
 binds {
+	// General
 	Mod+Shift+E { quit; }
+	Mod+Shift+Slash { show-hotkey-overlay; }
 	Mod+Q { close-window; }
 	Mod+T { spawn "alacritty"; }
 	Mod+A { spawn "rofi" "-show" "drun"; }
+
+	// Switching Workspaces
+	Mod+Shift+1 { move-column-to-workspace 1; }
+	Mod+Shift+2 { move-column-to-workspace 2; }
+	Mod+Shift+3 { move-column-to-workspace 3; }
+	Mod+Shift+4 { move-column-to-workspace 4; }
+	Mod+Shift+5 { move-column-to-workspace 5; }
+	Mod+Shift+6 { move-column-to-workspace 6; }
+	Mod+Shift+7 { move-column-to-workspace 7; }
+	Mod+Shift+8 { move-column-to-workspace 8; }
+	Mod+Shift+9 { move-column-to-workspace 9; }
+
+	// Move Focus 
+	Mod+H { focus-column-left; }
+	Mod+L { focus-column-right; }
+	Mod+J { focus-window-down; }
+	Mod+K { focus-window-up; }
+
+	// Moving Windows
+	Mod+Shift+Left { move-column-left; }
+	Mod+Shift+Right { move-column-right; }
+	Mod+Shift+Down { move-window-down; }
+	Mod+Shift+Up {move-window-up; }
+
+	// Window Sizing
+	Alt+Return { maximize-column; }
+
+	// Snap to Center
+	Alt+Shift+Return { center-column; }
 }
 
 layout {
-	gaps 16
+	gaps 5
 	center-focused-column "never"
+
+	focus-ring {
+		width 1.5
+		active-color "#7fc8ff"
+		inactive-color "#505050"
+	}
+
+	border {
+		off
+	}
+}
+
+window-rule {
+	geometry-corner-radius 4
+	clip-to-geometry true
 }
