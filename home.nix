@@ -9,12 +9,12 @@
 		enable = true;
 		shellAliases = {
 			btw = "echo I use NixOS btw";
-			nrs = "sudo nixos-rebuild switch --flake ~/dotfiles#doge";
+			nrs = "sudo nixos-rebuild switch --flake /home/abhijay/dotfiles#doge";
 			
 			# Shortcut Aliases
-			nc = "sudo vim /dotfiles/configurations.nix";
-			nf = "sudo vim /dotfiles/flakes.nix";
-			nh = "sudo vim /dotfiles/home.nix";
+			nc = "vim /home/abhijay/dotfiles/configuration.nix";
+			nf = "vim /home/abhijay/dotfiles/flake.nix";
+			nh = "vim /home/abhijay/dotfiles/home.nix";
 		};
 	};
 
