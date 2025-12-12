@@ -17,7 +17,6 @@
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
 
-
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
   services.xserver = {
@@ -61,6 +60,9 @@
   # Enable Niri
   programs.niri.enable = true;
 
+  # Enable zsh
+  programs.zsh.enable = true;
+
   # Power Management
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
@@ -85,6 +87,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.abhijay = {
     isNormalUser = true;
+    shell = pkgs.zsh;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       tree

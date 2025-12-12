@@ -9,9 +9,14 @@
 	imports = [
 		./noctalia.nix
 	];
+  
+  # zsh Config
+	programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
 
-	programs.bash = {
-		enable = true;
 		shellAliases = {
 			btw = "echo I use NixOS btw";
 			nrs = "sudo nixos-rebuild switch --flake /home/abhijay/dotfiles#doge";
@@ -20,7 +25,13 @@
 			nc = "vim /home/abhijay/dotfiles/configuration.nix";
 			nf = "vim /home/abhijay/dotfiles/flake.nix";
 			nh = "vim /home/abhijay/dotfiles/home.nix";
-		};
+    };
+
+    oh-my-zsh = {
+      enable = true;
+      plugins = [ "git" "sudo"];
+      theme = "rbbyrussell";
+    };
 	};
 
 	programs.vim = {
