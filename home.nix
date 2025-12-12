@@ -50,7 +50,11 @@
 			set ignorecase
 			set smartcase
 		'';
-	};
+  };
+
+  # Config Symlinks
+  xdg.configFile."niri/config.kdl".source = ./configs/niri/config.kdl;
+  xdg.configFile."ghostty/config".source = ./configs/ghostty/config;
 
 	home.packages = with pkgs; [
 		# System
@@ -72,9 +76,11 @@
 
 		# Ricing
 		fastfetch
-    google-fonts
     swww
-		roboto
-		quickshell
+    quickshell
+
+    # Fonts
+    google-fonts
+    roboto
 	];
 }

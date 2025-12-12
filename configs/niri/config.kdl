@@ -23,8 +23,9 @@ binds {
 	Mod+Shift+E { quit; }
 	Mod+Shift+Slash { show-hotkey-overlay; }
 	Mod+Q { close-window; }
-	Mod+T { spawn "alacritty"; }
+	Mod+T { spawn "ghostty"; }
 	Mod+A { spawn "rofi" "-show" "drun"; }
+  Mod+Backspace {spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
 
 	// Moving Workspace
 	Mod+1 { focus-workspace 1; }
@@ -89,6 +90,20 @@ binds {
 
 	// Cycle Window Size
 	Mod+R {switch-preset-column-width; }
+
+  // Volume Control
+  XF86AudioMute { spawn "pamixer" "-t";}
+  XF86AudioLowerVolume { spawn "pamixer" "-d" "5"; }
+  XF86AudioRaiseVolume { spawn "pamixer" "-i" "5"; }
+
+  // Brightness Control
+  XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
+  Xf86MonBrightnessUp { spawn "brightnessctl" "set" "+5%"; }
+
+  // Media Control
+  XF86AudioPrev { spawn "playerctl" "previous"; }
+  XF86AudioPlay { spawn "playerctl" "play-pause"; }
+  XF86AudioNext { spawn "playerctl" "next"; }
 
 }
 
