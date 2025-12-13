@@ -30,12 +30,13 @@
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" "sudo"];
-      theme = "robbyrussell";
+      theme = "";
     };
   };
 
-  programs.ghostty = {
+  programs.starship = {
     enable = true;
+    enableZshIntegration = true;
   };
 
 	programs.vim = {
@@ -69,7 +70,8 @@
 
   # Config Symlinks
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
-  xdg.configFile."ghostty/config".source =  config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
+  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
+  xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
 
 	home.packages = with pkgs; [
 		# System

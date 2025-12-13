@@ -1,0 +1,44 @@
+# 1. GLOBAL SETTINGS
+add_newline = true
+command_timeout = 1000
+
+# 2. THE LAYOUT
+# Minimal: Dir -> Git -> Arrow
+format = """
+$directory\
+$git_branch\
+$git_status\
+$character"""
+
+# 3. MODULE SETTINGS
+
+[directory]
+style = "bold #7aa2f7"  # Tokyo Night Blue
+format = "[$path]($style) "
+truncation_length = 3
+truncation_symbol = "…/"
+
+[git_branch]
+style = "bold #bb9af7"  # Tokyo Night Purple
+symbol = " "
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "bold #f7768e"  # Tokyo Night Red
+format = "[$all_status$ahead_behind]($style) "
+
+[character]
+success_symbol = "[➜](bold #c0caf5)"
+error_symbol = "[➜](bold #f7768e)"
+vimcmd_symbol = "[❮](bold #9ece6a)"
+
+# 4. DISABLE NOISE
+# Turn off all the language versions (Node, Python, etc.)
+[package]
+disabled = true
+[nodejs]
+disabled = true
+[python]
+disabled = true
+[rust]
+disabled = true
