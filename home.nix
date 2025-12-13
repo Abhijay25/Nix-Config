@@ -29,7 +29,11 @@
 
     oh-my-zsh = {
       enable = true;
-      plugins = [ "git" "sudo"];
+      plugins = [ 
+        "cp"
+        "git"
+        "sudo"
+        "web-search" ];
       theme = "";
     };
   };
@@ -37,6 +41,21 @@
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
+  };
+
+  # Pre-Load Ghostty (Faster Launch)
+  systemd.user.services.ghostty = {
+    Unit = {
+      Description = "Ghostty Terminal Daemon";
+    };
+    Service = {
+      # This command starts the server
+      ExecStart = "${pkgs.ghostty}/bin/ghostty --initial-window=false";
+      Restart = "always";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
   };
 
 	programs.vim = {
