@@ -30,9 +30,13 @@
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" "sudo"];
-      theme = "rbbyrussell";
+      theme = "robbyrussell";
     };
-	};
+  };
+
+  programs.ghostty = {
+    enable = true;
+  };
 
 	programs.vim = {
 		enable = true;
@@ -64,12 +68,12 @@
   };
 
   # Config Symlinks
-  xdg.configFile."niri/config.kdl".source = ./configs/niri/config.kdl;
-  xdg.configFile."ghostty/config".source = ./configs/ghostty/config;
+  xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
+  xdg.configFile."ghostty/config".source =  config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
 
 	home.packages = with pkgs; [
 		# System
-		gcc
+    gcc
 		nixpkgs-fmt
 		nodejs
 		ripgrep
@@ -90,8 +94,7 @@
     swww
     quickshell
 
-    # Fonts
-    google-fonts
-    roboto
+    # Browser
+    brave
 	];
 }

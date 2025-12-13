@@ -1,6 +1,7 @@
 prefer-no-csd
 spawn-at-startup "noctalia-shell"
 spawn-at-startup "swww-daemon"
+spawn-at-startup "swww" "img" "~/dotfiles/wallpapers/Tiger.png"
 
 hotkey-overlay {
   skip-at-startup
@@ -24,6 +25,7 @@ binds {
 	Mod+Shift+Slash { show-hotkey-overlay; }
 	Mod+Q { close-window; }
 	Mod+T { spawn "ghostty"; }
+  Mod+B { spawn "brave"; }
 	Mod+A { spawn "rofi" "-show" "drun"; }
   Mod+Backspace {spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
 
