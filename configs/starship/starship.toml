@@ -1,39 +1,53 @@
+# ~/.config/starship.toml
+
 # 1. GLOBAL SETTINGS
 add_newline = true
 command_timeout = 1000
 
 # 2. THE LAYOUT
-# Minimal: Dir -> Git -> Arrow
 format = """
 $directory\
-$git_branch\
-$git_status\
+${custom.git_dirty}\
+${custom.git_clean}\
 $character"""
 
-# 3. MODULE SETTINGS
-
+# 3. DIRECTORY
 [directory]
 style = "bold #7aa2f7"  # Tokyo Night Blue
 format = "[$path]($style) "
 truncation_length = 3
 truncation_symbol = "…/"
 
-[git_branch]
-style = "bold #bb9af7"  # Tokyo Night Purple
-symbol = " "
-format = "[$symbol$branch]($style) "
+# 4. DYNAMIC GIT BRANCH (With Icon)
 
-[git_status]
+# Case A: Dirty -> RED Icon & Name
+[custom.git_dirty]
+when = 'test -n "$(git status --porcelain 2>/dev/null)"'
+command = 'git branch --show-current'
 style = "bold #f7768e"  # Tokyo Night Red
-format = "[$all_status$ahead_behind]($style) "
+# Added the  icon here
+format = "[ $output]($style) "
 
+# Case B: Clean -> PURPLE Icon & Name
+[custom.git_clean]
+when = 'test -z "$(git status --porcelain 2>/dev/null)"'
+command = 'git branch --show-current'
+style = "bold #bb9af7"  # Tokyo Night Purple
+# Added the  icon here
+format = "[ $output]($style) "
+
+# 5. THE ARROW PROMPT
 [character]
 success_symbol = "[➜](bold #c0caf5)"
 error_symbol = "[➜](bold #f7768e)"
 vimcmd_symbol = "[❮](bold #9ece6a)"
 
-# 4. DISABLE NOISE
-# Turn off all the language versions (Node, Python, etc.)
+# 6. DISABLE STANDARD MODULES
+[git_branch]
+disabled = true
+[git_status]
+disabled = true
+
 [package]
 disabled = true
 [nodejs]
