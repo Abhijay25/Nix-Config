@@ -1,0 +1,127 @@
+configuration {
+    /* 1. ENABLED MODES (Order determines tab order) */
+    modi: "drun,filebrowser,ssh";
+    
+    /* 2. ICON LABELS FOR TABS */
+    display-drun: " ";        /* Apps */
+    display-filebrowser: " "; /* Files */
+    display-ssh: " ";         /* SSH */
+    
+    /* 3. GENERAL SETTINGS */
+    show-icons: true;
+    drun-display-format: "{name}";
+    cycle: false;
+    sort: true;
+    sorting-method: "fzf";
+    matching: "fuzzy";
+    disable-history: true;
+}
+
+* {
+    /* Tokyo Night Colors with 85% Opacity */
+    bg-col:  #1a1b26D9;
+    bg-col-light: #1a1b26D9;
+    border-col: #bb9af7;
+    selected-col: #414868D9; 
+    blue: #7aa2f7;
+    fg-col: #c0caf5;
+    fg-col2: #f7768e;
+    grey: #565f89;
+
+    width: 600;
+    font: "JetBrainsMono Nerd Font 12";
+}
+
+element-text, element-icon , mode-switcher {
+    background-color: transparent;
+    text-color:       inherit;
+}
+
+window {
+    height: 420px;
+    border: 2px;
+    border-color: @border-col;
+    background-color: @bg-col;
+    transparency: "real";
+    border-radius: 10px;
+}
+
+mainbox {
+    background-color: transparent;
+    children: [ "inputbar", "listview", "mode-switcher" ];
+}
+
+inputbar {
+    children: [entry];
+    background-color: transparent;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+entry {
+    padding: 6px;
+    margin: 20px 0px 0px 20px;
+    text-color: @fg-col;
+    background-color: transparent;
+    placeholder: "Search Apps...";
+    placeholder-color: @grey;
+}
+
+listview {
+    border: 0px 0px 0px;
+    padding: 6px 0px 0px;
+    margin: 10px 20px 0px 20px;
+    columns: 1;
+    lines: 6;
+    background-color: transparent;
+}
+
+/* --- TABS (Mode Switcher) --- */
+mode-switcher {
+    spacing: 20px; /* Spaced out slightly more for clean look */
+    padding: 10px 25px 10px 25px;
+    background-color: transparent;
+}
+
+button {
+    padding: 10px;
+    background-color: transparent;
+    text-color: @grey;
+    vertical-align: 0.5; 
+    horizontal-align: 0.5;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button selected {
+    background-color: @selected-col;
+    text-color: @blue; /* Active tab lights up Blue */
+}
+
+/* --- LIST ITEMS --- */
+element {
+    padding: 8px;
+    background-color: transparent;
+    text-color: @fg-col;
+    border-radius: 5px;
+}
+
+element normal.normal {
+    background-color: transparent;
+    text-color: @fg-col;
+}
+
+element alternate.normal {
+    background-color: transparent;
+    text-color: @fg-col;
+}
+
+element selected.normal {
+    background-color: @selected-col;
+    text-color: @fg-col;
+}
+
+element-icon {
+    size: 24px;
+    margin: 0 10px 0 0;
+}

@@ -63,6 +63,9 @@
   # Enable zsh
   programs.zsh.enable = true;
 
+  # Enable Screen Recorder
+  programs.gpu-screen-recorder.enable = true;
+
   # Power Management
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;

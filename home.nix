@@ -3,7 +3,7 @@
 {
 	home.username = "abhijay";
 	home.homeDirectory = "/home/abhijay";
-	programs.git.enable = true;
+  programs.git.enable = true;
 	home.stateVersion = "25.11";
 
 	imports = [
@@ -90,28 +90,41 @@
   # Config Symlinks
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
+  xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/rofi/config.rasi";
   xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
 
 	home.packages = with pkgs; [
-		# System
+    # System
+    bluez # Bluetooth
+    bluez-tools
     gcc
 		nixpkgs-fmt
 		nodejs
-		ripgrep
-    rofi
+    ripgrep
+    rofi # Launcher
 
     # Quality of Life
     brightnessctl
     libnotify
+    networkmanagerapplet
     pamixer
     playerctl
+    polkit_gnome
+
+    # Utilities
+    gpu-screen-recorder
+    grim # Screenshot
+    slurp
+    wl-clipboard
 
 		# Editor & LSP
 		neovim
 		nil
 
-		# Ricing
-		fastfetch
+    # Ricing & Themes
+    adwaita-icon-theme
+    fastfetch
+    papirus-icon-theme
     swww
     quickshell
 
