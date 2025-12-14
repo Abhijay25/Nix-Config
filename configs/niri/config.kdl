@@ -2,6 +2,7 @@ prefer-no-csd
 spawn-at-startup "noctalia-shell"
 spawn-at-startup "swww-daemon"
 spawn-at-startup "swww" "img" "~/dotfiles/wallpapers/Tiger.png"
+spawn-at-startup "sh" "-c" "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
 
 hotkey-overlay {
   skip-at-startup
@@ -27,7 +28,13 @@ binds {
 	Mod+T { spawn "ghostty"; }
   Mod+B { spawn "brave"; }
 	Mod+A { spawn "rofi" "-show" "drun"; }
+  Mod+F { spawn "thunar"; }
   Mod+Backspace {spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
+
+  // Screenshot (Clipboard)
+  Print { spawn "sh" "-c" "grim -g \"$(slurp)\" - | wl-copy"; }
+  // Save Screenshot
+  Shift+Print { spawn "sh" "-c" "grim -g \"$(slurp)\" ~/Pictures/Screenshot_$(date +'%Y-%m-%d_%H-%M-%S').png"; }
 
 	// Moving Workspace
 	Mod+1 { focus-workspace 1; }

@@ -70,6 +70,19 @@
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
 
+  # Bluetooth Enable
+  hardware.bluetooth.enable = true;
+
+  # File Manager
+  programs.thunar.enable = true;
+
+  services.gvfs.enable = true; # Mount USB drives
+  services.tumbler.enable = true; # Thumbnail support
+
+  programs.thunar.plugins = with pkgs.xfce; [
+    thunar-archive-plugin
+    thunar-volman
+  ];
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
