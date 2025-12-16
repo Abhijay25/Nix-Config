@@ -13,6 +13,7 @@
   
   services.swaync.enable = true;
   services.network-manager-applet.enable = true;
+  services.gnome-keyring.enable = true;
 
   # zsh Config
 	programs.zsh = {
@@ -56,6 +57,24 @@
       # This command starts the server
       ExecStart = "${pkgs.ghostty}/bin/ghostty --initial-window=false";
       Restart = "always";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+      Wants = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
     };
     Install = {
       WantedBy = [ "graphical-session.target" ];
@@ -122,7 +141,8 @@
     bluez-tools
     gcc
 		nixpkgs-fmt
-		nodejs
+    nodejs
+    polkit_gnome 
     rofi # Launcher
     unzip
     zip
@@ -140,7 +160,6 @@
     polkit_gnome
 
     # Utilities
-    gpu-screen-recorder
     grim # Screenshot
     slurp
     wl-clipboard # Clipboard Manager
@@ -162,5 +181,10 @@
 
     # Applications
     telegram-desktop
+
+    (writeShellScriptBin "gpu-screen-recorder" ''
+      # Call the RENAMED system wrapper
+      exec /run/wrappers/bin/gpu-screen-recorder-core -w portal "$@"
+    '')
 	];
 }

@@ -131,7 +131,7 @@ layout {
 	}
 
 	// Default Window Proportion
-	default-column-width { proportion 0.5; }
+	default-column-width { proportion 1.00; }
 
 	// Window Proportion Presets
 	preset-column-widths {

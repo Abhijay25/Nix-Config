@@ -14,6 +14,12 @@
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
 
+  # Network Keyringservices.gnome.gnome-keyring.enable = true;
+  services.gnome.gnome-keyring.enable = true;
+
+  # Enable Keyring on Login
+  security.pam.services.login.enableGnomeKeyring = true;
+
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
 
@@ -63,15 +69,38 @@
   # Enable zsh
   programs.zsh.enable = true;
 
-  # Enable Screen Recorder
-  programs.gpu-screen-recorder.enable = true;
-
   # Power Management
   services.upower.enable = true;
   services.power-profiles-daemon.enable = true;
 
   # Bluetooth Enable
   hardware.bluetooth.enable = true;
+
+  xdg.portal = {
+    enable = true;
+
+    # Install both the GTK portal (for file pickers) and GNOME portal (for screen recording)
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-gnome ];
+
+    # EXPLICIT CONFIGURATION (The Fix)
+    config = {
+      # For Niri, force usage of the GNOME portal for screencasting
+      niri = {
+        default = [ "gnome" "gtk" ];
+      };
+      # Fallback for anything else
+      common = {
+        default = [ "gtk" ];
+      };
+    };
+  };
+
+  security.wrappers.gpu-screen-recorder-core = {
+    owner = "root";
+    group = "root";
+    capabilities = "cap_sys_admin+ep";
+    source = "${pkgs.gpu-screen-recorder}/bin/gpu-screen-recorder";
+  };
 
   # File Manager
   programs.thunar.enable = true;
@@ -104,7 +133,7 @@
   users.users.abhijay = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" ]; # Enable ‘sudo’ for the user.
     packages = with pkgs; [
       tree
     ];
@@ -118,6 +147,8 @@
     ghostty
     vim
     wget
+
+    pkgs.gpu-screen-recorder
 
     (sddm-astronaut.override {
       themeConfig = {
