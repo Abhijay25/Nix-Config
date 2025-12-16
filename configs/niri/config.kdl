@@ -3,6 +3,7 @@ spawn-at-startup "noctalia-shell"
 spawn-at-startup "swww-daemon"
 spawn-at-startup "swww" "img" "~/dotfiles/wallpapers/Tiger.png"
 spawn-at-startup "sh" "-c" "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1"
+spawn-at-startup "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
 
 hotkey-overlay {
   skip-at-startup

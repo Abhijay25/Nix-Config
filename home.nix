@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 
 {
 	home.username = "abhijay";
@@ -18,9 +18,17 @@
   # zsh Config
 	programs.zsh = {
     enable = true;
-    enableCompletion = true;
+    enableCompletion = false;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+
+    # Replace AutoSuggestion
+    completionInit = "autoload -U compinit && compinit -u -C";
+
+    # Skip Security Check for Files
+    initContent = lib.mkBefore ''
+      export ZSH_DISABLE_COMPFIX="true"
+    '';
 
 		shellAliases = {
 			btw = "echo I use NixOS btw";
@@ -31,18 +39,9 @@
 			nf = "vim /home/abhijay/dotfiles/flake.nix";
 			nh = "vim /home/abhijay/dotfiles/home.nix";
     };
-
-    oh-my-zsh = {
-      enable = true;
-      plugins = [ 
-        "cp"
-        "git"
-        "sudo"
-        "web-search" ];
-      theme = "";
-    };
   };
 
+  # Terminal Customization
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
@@ -133,6 +132,10 @@
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
   xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/rofi/config.rasi";
   xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
+
+  home.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+  };
 
 	home.packages = with pkgs; [
     
