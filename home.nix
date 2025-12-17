@@ -179,9 +179,6 @@
     swww
     quickshell
 
-    # Browser
-    brave
-
     # Applications
     telegram-desktop
 
@@ -189,5 +186,25 @@
       # Call the RENAMED system wrapper
       exec /run/wrappers/bin/gpu-screen-recorder-core -w portal "$@"
     '')
+
+    # Hardware Acceleration for Brave
+    (brave.override {
+      commandLineArgs = [
+        # Force Wayland (Essential for Niri)
+        "--enable-features=UseOzonePlatform"
+        "--ozone-platform=wayland"
+
+        # Stop KWallet Search
+        "--password-store=basic"
+
+        # Unblock the GPU (Fixes 'Disabled via blocklist')
+        "--ignore-gpu-blocklist"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+
+        # Force Hardware Video Decoding (Saves battery on YouTube)
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization"
+      ];
+    })
 	];
 }

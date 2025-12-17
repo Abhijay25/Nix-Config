@@ -62,6 +62,24 @@
       qt5compat
     ];
   };
+
+  hardware.graphics = {
+    enable = true;
+    # For 32-bit apps (Steam, Wine)
+    enable32Bit = true;
+
+    # Install necessary drivers for Intel GPU
+    extraPackages = with pkgs; [
+      intel-media-driver   # Hardware Video Acceleration (Broadwell+)
+      intel-vaapi-driver   # Fallback for older chips
+      libvdpau-va-gl
+    ];
+  };
+
+  # Force the system to use these drivers
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD"; # Force Intel Gen8+ driver
+  };
   
   # Enable Niri
   programs.niri.enable = true;
