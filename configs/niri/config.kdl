@@ -30,6 +30,7 @@ binds {
   Mod+B { spawn "brave"; }
 	Mod+A { spawn "rofi" "-show" "drun"; }
   Mod+F { spawn "thunar"; }
+  Mod+C { spawn "code"; }
   Mod+Backspace {spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
 
   // Screenshot (Clipboard)

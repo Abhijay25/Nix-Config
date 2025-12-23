@@ -6,6 +6,9 @@
       ./hardware-configuration.nix
     ];
 
+  # Allow Proprietary Apps
+  nixpkgs.config.allowUnfree = true;
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -14,7 +17,7 @@
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
 
-  # Network Keyringservices.gnome.gnome-keyring.enable = true;
+  # Network Keyring
   services.gnome.gnome-keyring.enable = true;
 
   # Enable Keyring on Login
@@ -23,16 +26,10 @@
   # Set your time zone.
   time.timeZone = "Asia/Singapore";
 
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-  services.xserver = {
-  	enable = true;
-	autoRepeatDelay = 200;
-	autoRepeatInterval = 35;
-  };
+  services.xserver.enable = true;
 
   # Hide Bootloader & Wall of Text on Boot
-  boot.loader.timeout = 0;
+  boot.loader.timeout = 1;
   boot.plymouth.enable = true;
 
   # Silence Kernel Text on Boot

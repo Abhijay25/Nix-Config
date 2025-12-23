@@ -37,7 +37,9 @@
 			# Shortcut Aliases
 			nc = "vim /home/abhijay/dotfiles/configuration.nix";
 			nf = "vim /home/abhijay/dotfiles/flake.nix";
-			nh = "vim /home/abhijay/dotfiles/home.nix";
+      nh = "vim /home/abhijay/dotfiles/home.nix";
+
+      fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
     };
   };
 
@@ -127,6 +129,12 @@
     nix-direnv.enable = true;
   };
 
+  # VSCode
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode; # Or pkgs.vscodium if you want the open-source version
+  };
+
   # Config Symlinks
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
@@ -143,6 +151,7 @@
     bluez # Bluetooth
     bluez-tools
     gcc
+    ffmpeg
 		nixpkgs-fmt
     nodejs
     polkit_gnome 
@@ -168,19 +177,24 @@
     wl-clipboard # Clipboard Manager
     zathura # PDF Viwer
 
-		# Editor & LSP
+    # Editor & Languages
+    go
 		neovim
 		nil
 
     # Ricing & Themes
     adwaita-icon-theme
+    expect
     fastfetch
     papirus-icon-theme
     swww
+    util-linux
     quickshell
 
     # Applications
     telegram-desktop
+    vesktop
+    spotify
 
     (writeShellScriptBin "gpu-screen-recorder" ''
       # Call the RENAMED system wrapper
