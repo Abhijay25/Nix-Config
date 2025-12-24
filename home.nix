@@ -9,7 +9,17 @@
 		./noctalia.nix
   ];
 
-  programs.git.enable = true;
+  programs.git = {
+    enable = true;
+    settings = {
+      user = {
+        name = "Abhijay";
+        email = "163997617+Abhijay25@users.noreply.github.com";
+      };
+
+      init.defaultBranch = "main";
+    };
+  };
   
   services.swaync.enable = true;
   services.network-manager-applet.enable = true;
@@ -36,7 +46,6 @@
 			
 			# Shortcut Aliases
 			nc = "vim /home/abhijay/dotfiles/configuration.nix";
-			nf = "vim /home/abhijay/dotfiles/flake.nix";
       nh = "vim /home/abhijay/dotfiles/home.nix";
 
       fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
@@ -180,7 +189,9 @@
     # Editor & Languages
     go
 		neovim
-		nil
+    nil # LSP for Nix
+    tinymist # LSP for typst
+    typst
 
     # Ricing & Themes
     adwaita-icon-theme
@@ -192,6 +203,7 @@
     quickshell
 
     # Applications
+    obsidian
     telegram-desktop
     vesktop
     spotify

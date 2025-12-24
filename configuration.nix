@@ -141,9 +141,6 @@
      jack.enable = true;
    };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.abhijay = {
     isNormalUser = true;
@@ -153,8 +150,6 @@
       tree
     ];
   };
-
-  # programs.firefox.enable = true;
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
