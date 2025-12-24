@@ -141,7 +141,7 @@
   # VSCode
   programs.vscode = {
     enable = true;
-    package = pkgs.vscode; # Or pkgs.vscodium if you want the open-source version
+    package = pkgs.vscode;
   };
 
   # Config Symlinks
@@ -152,6 +152,9 @@
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
+    DIRENV_LOG_FORMAT = ""; # Silence direnv messages
+
+    EDITOR = "vim";
   };
 
 	home.packages = with pkgs; [
