@@ -128,8 +128,9 @@
     thunar-volman
   ];
 
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  # Wireshark
+  programs.wireshark.enable = true;
+  programs.wireshark.package = pkgs.wireshark-cli;
 
    # Enable sound
    security.rtkit.enable = true;
@@ -145,7 +146,7 @@
   users.users.abhijay = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark"];
     packages = with pkgs; [
       tree
     ];

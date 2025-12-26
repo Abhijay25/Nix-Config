@@ -136,6 +136,12 @@
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+
+    config = {
+      global = {
+        hide_env_diff = true;  # Hides the giant wall of variable text
+      };
+    };
   };
 
   # VSCode
@@ -152,7 +158,6 @@
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
-    DIRENV_LOG_FORMAT = ""; # Silence direnv messages
 
     EDITOR = "vim";
   };
