@@ -29,6 +29,16 @@
 
   services.xserver.enable = true;
 
+  # Garbage Collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 7d";
+  };
+
+  # Nix Store Optimisation
+  nix.settings.auto-optimise-store = true;
+
   # Hide Bootloader & Wall of Text on Boot
   boot.loader.timeout = 1;
   boot.plymouth.enable = true;
