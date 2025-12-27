@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, go }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  go,
+}:
 stdenv.mkDerivation rec {
   pname = "brrtfetch";
   version = "unstable-2025-10-05";
@@ -11,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-hC2R17LadoVanjLs4iBTr55qNJEDYKI9H3lQzyHQIek=";
   };
 
-  nativeBuildInputs = [ go ];
+  nativeBuildInputs = [go];
 
   buildPhase = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -28,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ferrebarrat/brrtfetch";
     license = lib.licenses.mit;
     mainProgram = "brrtfetch";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [];
     platforms = lib.platforms.all;
   };
 }

@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Allow Proprietary Apps
   nixpkgs.config.allowUnfree = true;
@@ -67,8 +68,8 @@
 
     # Install necessary drivers for Intel GPU
     extraPackages = with pkgs; [
-      intel-media-driver   # Hardware Video Acceleration (Broadwell+)
-      intel-vaapi-driver   # Fallback for older chips
+      intel-media-driver # Hardware Video Acceleration (Broadwell+)
+      intel-vaapi-driver # Fallback for older chips
       libvdpau-va-gl
     ];
   };
@@ -77,7 +78,7 @@
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD"; # Force Intel Gen8+ driver
   };
-  
+
   # Enable Niri
   programs.niri.enable = true;
 
@@ -95,17 +96,17 @@
     enable = true;
 
     # Install both the GTK portal (for file pickers) and GNOME portal (for screen recording)
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-gnome ];
+    extraPortals = [pkgs.xdg-desktop-portal-gtk pkgs.xdg-desktop-portal-gnome];
 
     # EXPLICIT CONFIGURATION (The Fix)
     config = {
       # For Niri, force usage of the GNOME portal for screencasting
       niri = {
-        default = [ "gnome" "gtk" ];
+        default = ["gnome" "gtk"];
       };
       # Fallback for anything else
       common = {
-        default = [ "gtk" ];
+        default = ["gtk"];
       };
     };
   };
@@ -130,23 +131,23 @@
 
   # Wireshark
   programs.wireshark.enable = true;
-  programs.wireshark.package = pkgs.wireshark-cli;
+  programs.wireshark.package = pkgs.wireshark;
 
-   # Enable sound
-   security.rtkit.enable = true;
-   services.pipewire = {
-     enable = true;
-     pulse.enable = true;
-     alsa.enable = true;
-     alsa.support32Bit = true;
-     jack.enable = true;
-   };
+  # Enable sound
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    jack.enable = true;
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.abhijay = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = [ "networkmanager" "wheel" "video" "audio" "wireshark"];
+    extraGroups = ["networkmanager" "wheel" "video" "audio" "wireshark"];
     packages = with pkgs; [
       tree
     ];
@@ -198,6 +199,4 @@
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "25.11"; # Did you read the comment?
-
 }
-

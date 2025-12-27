@@ -1,12 +1,15 @@
-{ config, pkgs, inputs, lib, ... }:
-
 {
-	home.username = "abhijay";
-	home.homeDirectory = "/home/abhijay";
-	home.stateVersion = "25.11";
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
+  home.username = "abhijay";
+  home.homeDirectory = "/home/abhijay";
+  home.stateVersion = "25.11";
 
-	imports = [
-		./noctalia.nix
+  imports = [
+    ./noctalia.nix
   ];
 
   programs.git = {
@@ -20,13 +23,13 @@
       init.defaultBranch = "main";
     };
   };
-  
+
   services.swaync.enable = true;
   services.network-manager-applet.enable = true;
   services.gnome-keyring.enable = true;
 
   # zsh Config
-	programs.zsh = {
+  programs.zsh = {
     enable = true;
     enableCompletion = false;
     autosuggestion.enable = true;
@@ -40,12 +43,12 @@
       export ZSH_DISABLE_COMPFIX="true"
     '';
 
-		shellAliases = {
-			btw = "echo I use NixOS btw";
-			nrs = "sudo nixos-rebuild switch --flake /home/abhijay/dotfiles#doge";
-			
-			# Shortcut Aliases
-			nc = "vim /home/abhijay/dotfiles/configuration.nix";
+    shellAliases = {
+      btw = "echo I use NixOS btw";
+      nrs = "sudo nixos-rebuild switch --flake /home/abhijay/dotfiles#doge";
+
+      # Shortcut Aliases
+      nc = "vim /home/abhijay/dotfiles/configuration.nix";
       nh = "vim /home/abhijay/dotfiles/home.nix";
 
       fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
@@ -69,15 +72,15 @@
       Restart = "always";
     };
     Install = {
-      WantedBy = [ "graphical-session.target" ];
+      WantedBy = ["graphical-session.target"];
     };
   };
 
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     Unit = {
       Description = "polkit-gnome-authentication-agent-1";
-      Wants = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
+      Wants = ["graphical-session.target"];
+      After = ["graphical-session.target"];
     };
     Service = {
       Type = "simple";
@@ -87,43 +90,43 @@
       TimeoutStopSec = 10;
     };
     Install = {
-      WantedBy = [ "graphical-session.target" ];
+      WantedBy = ["graphical-session.target"];
     };
   };
 
-	programs.vim = {
-		enable = true;
+  programs.vim = {
+    enable = true;
 
-		plugins = with pkgs.vimPlugins; [
-			vim-nix
-			auto-pairs
-			vim-lastplace
-		];
-		
-		extraConfig = ''
-			" Visuals
-			set number
-			syntax on
+    plugins = with pkgs.vimPlugins; [
+      vim-nix
+      auto-pairs
+      vim-lastplace
+    ];
 
-			" Indentation
-			set autoindent
-			set smartindent
+    extraConfig = ''
+      " Visuals
+      set number
+      syntax on
 
-			" Tabs & Spaces
-			set expandtab
-			set tabstop=2
-			set shiftwidth=2
+      " Indentation
+      set autoindent
+      set smartindent
 
-			" Searching
-			set ignorecase
-			set smartcase
-		'';
+      " Tabs & Spaces
+      set expandtab
+      set tabstop=2
+      set shiftwidth=2
+
+      " Searching
+      set ignorecase
+      set smartcase
+    '';
   };
 
   # Terminal Browsing
   programs.zoxide = {
     enable = true;
-    enableZshIntegration = true; 
+    enableZshIntegration = true;
   };
 
   # File Searching
@@ -139,7 +142,7 @@
 
     config = {
       global = {
-        hide_env_diff = true;  # Hides the giant wall of variable text
+        hide_env_diff = true; # Hides the giant wall of variable text
       };
     };
   };
@@ -162,16 +165,15 @@
     EDITOR = "vim";
   };
 
-	home.packages = with pkgs; [
-    
+  home.packages = with pkgs; [
     # System
     bluez # Bluetooth
     bluez-tools
     gcc
     ffmpeg
-		nixpkgs-fmt
+    nixpkgs-fmt
     nodejs
-    polkit_gnome 
+    polkit_gnome
     rofi # Launcher
     unzip
     zip
@@ -196,7 +198,7 @@
 
     # Editor & Languages
     go
-		neovim
+    neovim
     nil # LSP for Nix
     tinymist # LSP for typst
     typst
@@ -240,5 +242,5 @@
         "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization"
       ];
     })
-	];
+  ];
 }
