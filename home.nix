@@ -213,6 +213,7 @@
     quickshell
 
     # Applications
+    localsend
     obsidian
     telegram-desktop
     vesktop
