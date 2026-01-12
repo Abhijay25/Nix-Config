@@ -135,7 +135,7 @@
   services.gvfs.enable = true; # Mount USB drives
   services.tumbler.enable = true; # Thumbnail support
 
-  programs.thunar.plugins = with pkgs.xfce; [
+  programs.thunar.plugins = with pkgs; [
     thunar-archive-plugin
     thunar-volman
   ];

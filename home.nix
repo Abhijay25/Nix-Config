@@ -182,6 +182,7 @@
     btop
     lazygit
     ripgrep
+    yazi
 
     # Quality of Life
     brightnessctl

@@ -31,7 +31,7 @@ binds {
 	Mod+A { spawn "rofi" "-show" "drun"; }
   Mod+F { spawn "thunar"; }
   Mod+C { spawn "code"; }
-  Mod+Backspace {spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
+  Mod+Backspace { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
 
   // Screenshot (Clipboard)
   Print { spawn "sh" "-c" "grim -g \"$(slurp)\" - | wl-copy"; }
