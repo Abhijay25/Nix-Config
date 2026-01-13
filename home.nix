@@ -198,6 +198,7 @@
     zathura # PDF Viwer
 
     # Editor & Languages
+    claude-code
     code-cursor
     go
     neovim
