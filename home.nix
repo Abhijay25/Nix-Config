@@ -198,6 +198,7 @@
     zathura # PDF Viwer
 
     # Editor & Languages
+    code-cursor
     go
     neovim
     nil # LSP for Nix
