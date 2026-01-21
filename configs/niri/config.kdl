@@ -72,6 +72,10 @@ binds {
 	Mod+Shift+Down { move-window-down; }
 	Mod+Shift+Up {move-window-up; }
 
+  // Swap Monitors
+  Mod+Left  { focus-monitor-left; }
+  Mod+Right { focus-monitor-right; }
+
 	// Window Sizing
 	Alt+Return { maximize-column; }
 
