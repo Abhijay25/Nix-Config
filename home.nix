@@ -201,6 +201,7 @@
     claude-code
     code-cursor
     go
+    gnumake
     neovim
     nil # LSP for Nix
     tinymist # LSP for typst

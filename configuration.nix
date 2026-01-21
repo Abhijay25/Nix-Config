@@ -154,11 +154,14 @@
     jack.enable = true;
   };
 
+  # Docker
+  virtualisation.docker.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.abhijay = {
     isNormalUser = true;
     shell = pkgs.zsh;
-    extraGroups = ["networkmanager" "wheel" "video" "audio" "wireshark"];
+    extraGroups = ["networkmanager" "wheel" "video" "audio" "wireshark" "docker"];
     packages = with pkgs; [
       tree
     ];
@@ -166,6 +169,7 @@
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
+    docker-compose
     git
     ghostty
     vim
