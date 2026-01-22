@@ -120,6 +120,9 @@ binds {
   XF86AudioPlay { spawn "playerctl" "play-pause"; }
   XF86AudioNext { spawn "playerctl" "next"; }
 
+  // Microphone
+  XF86AudioMicMute { spawn "pamixer" "--default-source" "-t"; }
+
 }
 
 layout {
