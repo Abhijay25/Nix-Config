@@ -28,12 +28,6 @@
   services.network-manager-applet.enable = true;
   services.gnome-keyring.enable = true;
 
-  # nrs Repalcement
-  programs.nh = {
-    enable = true;
-    flake = "/home/abhijay/dotfiles";
-  };
-
   # zsh Config
   programs.zsh = {
     enable = true;
@@ -51,7 +45,7 @@
 
     shellAliases = {
       btw = "echo I use Nix btw";
-      nrs = "nh os switch";
+      nrs = "sudo nixos-rebuild switch --flake ~/dotfiles |& nom";
 
       # Shortcut Aliases
       nc = "vim /home/abhijay/dotfiles/configuration.nix";

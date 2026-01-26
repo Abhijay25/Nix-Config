@@ -178,6 +178,7 @@
     wget
 
     pkgs.gpu-screen-recorder
+    nix-output-monitor
 
     (sddm-astronaut.override {
       themeConfig = {
