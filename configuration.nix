@@ -14,6 +14,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "doge"; # Define your hostname.
+  networking.nameservers = ["8.8.8.8 1.1.1.1"];
+  networking.networkmanager.dns = "default";
 
   # Configure network connections interactively with nmcli or nmtui.
   networking.networkmanager.enable = true;
@@ -33,7 +35,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 7d";
+    options = "--delete-older-than 14d";
   };
 
   # Nix Store Optimisation
