@@ -207,6 +207,9 @@
     tinymist # LSP for typst
     typst
 
+    # Coding
+    yarn
+
     # Ricing & Themes
     adwaita-icon-theme
     expect
