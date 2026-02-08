@@ -1,5 +1,6 @@
 {
   description = "NixOS on Thinkpad";
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -15,7 +16,7 @@
 
     nixvim = {
       url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs"; # <--- CRITICAL LINE
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -26,15 +27,17 @@
   }: {
     nixosConfigurations.doge = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
       modules = [
-        ./configuration.nix
+        ./hardware-configuration.nix
+        ./modules
         home-manager.nixosModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = {inherit inputs;};
-            users.abhijay = import ./home.nix;
+            extraSpecialArgs = { inherit inputs; };
+            users.abhijay = import ./modules/users/abhijay.nix;
             backupFileExtension = "backup";
           };
         }

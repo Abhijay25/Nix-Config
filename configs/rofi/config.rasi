@@ -1,13 +1,11 @@
 configuration {
-    /* 1. ENABLED MODES (Order determines tab order) */
-    modi: "drun,filebrowser,ssh";
-    
-    /* 2. ICON LABELS FOR TABS */
-    display-drun: " ";        /* Apps */
-    display-filebrowser: " "; /* Files */
-    display-ssh: " ";         /* SSH */
-    
-    /* 3. GENERAL SETTINGS */
+    modi: "drun,files:~/.config/rofi/scripts/rofi-file-search.sh,terminal:~/.config/rofi/scripts/rofi-run-command.sh";
+
+    /* Tab Labels */
+    display-drun: " Apps";
+    display-files: " Files";
+    display-terminal: ">_";
+
     show-icons: true;
     drun-display-format: "{name}";
     cycle: false;
@@ -15,14 +13,17 @@ configuration {
     sorting-method: "fzf";
     matching: "fuzzy";
     disable-history: true;
+    drun-use-desktop-cache: true;
+    drun-reload-desktop-cache: true;
+    max-history-size: 10;
 }
 
+/* Colors */
 * {
-    /* Tokyo Night Colors with 85% Opacity */
     bg-col:  #1a1b26D9;
     bg-col-light: #1a1b26D9;
     border-col: #bb9af7;
-    selected-col: #414868D9; 
+    selected-col: #414868D9;
     blue: #7aa2f7;
     fg-col: #c0caf5;
     fg-col2: #f7768e;
@@ -32,9 +33,15 @@ configuration {
     font: "JetBrainsMono Nerd Font 12";
 }
 
-element-text, element-icon , mode-switcher {
+mode-switcher {
     background-color: transparent;
-    text-color:       inherit;
+    text-color: inherit;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: inherit;
+    vertical-align: 0.5;
 }
 
 window {
@@ -63,7 +70,7 @@ entry {
     margin: 20px 0px 0px 20px;
     text-color: @fg-col;
     background-color: transparent;
-    placeholder: "Search Apps...";
+    placeholder: "";
     placeholder-color: @grey;
 }
 
@@ -76,9 +83,8 @@ listview {
     background-color: transparent;
 }
 
-/* --- TABS (Mode Switcher) --- */
 mode-switcher {
-    spacing: 20px; /* Spaced out slightly more for clean look */
+    spacing: 20px;
     padding: 10px 25px 10px 25px;
     background-color: transparent;
 }
@@ -87,7 +93,7 @@ button {
     padding: 10px;
     background-color: transparent;
     text-color: @grey;
-    vertical-align: 0.5; 
+    vertical-align: 0.5;
     horizontal-align: 0.5;
     border-radius: 5px;
     cursor: pointer;
@@ -95,10 +101,9 @@ button {
 
 button selected {
     background-color: @selected-col;
-    text-color: @blue; /* Active tab lights up Blue */
+    text-color: @blue;
 }
 
-/* --- LIST ITEMS --- */
 element {
     padding: 8px;
     background-color: transparent;
@@ -122,6 +127,8 @@ element selected.normal {
 }
 
 element-icon {
+    background-color: transparent;
     size: 24px;
     margin: 0 10px 0 0;
+    vertical-align: 0.5;
 }

@@ -14,11 +14,11 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "doge"; # Define your hostname.
-  networking.nameservers = ["8.8.8.8 1.1.1.1"];
-  networking.networkmanager.dns = "default";
 
   # Configure network connections interactively with nmcli or nmtui.
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+  };
 
   # Network Keyring
   services.gnome.gnome-keyring.enable = true;
@@ -157,7 +157,18 @@
   };
 
   # Docker
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    # Fix: Force Docker to use IPs that don't conflict with NUS WiFi
+    daemon.settings = {
+      # Move the default 'docker0' bridge
+      "bip" = "10.200.0.1/16";
+      # Move all custom 'br-...' networks 
+      "default-address-pools" = [
+        { "base" = "10.201.0.0/16"; "size" = 24; }
+      ];   
+    };
+  };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.abhijay = {

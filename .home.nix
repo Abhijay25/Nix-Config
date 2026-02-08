@@ -52,6 +52,8 @@
       nh = "vim /home/abhijay/dotfiles/home.nix";
 
       fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
+
+      socvpn = "sudo openconnect --protocol=fortinet webvpn.comp.nus.edu.sg --cookie=SVPNCOOKIE=$1";
     };
   };
 
@@ -157,6 +159,7 @@
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
   xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/rofi/config.rasi";
+  xdg.configFile."rofi/scripts".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/scripts";
   xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
 
   home.sessionVariables = {
@@ -180,6 +183,7 @@
 
     # Terminal & NixOS
     btop
+    fd # Fast file finder for rofi
     lazygit
     ripgrep
     yazi

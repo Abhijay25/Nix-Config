@@ -1,52 +1,35 @@
-# ~/.config/starship.toml
+# Starship Config
 
-# 1. GLOBAL SETTINGS
 add_newline = true
-command_timeout = 1000
+command_timeout = 500
+scan_timeout = 100
 
-# 2. THE LAYOUT
-format = """
-$directory\
-${custom.git_dirty}\
-${custom.git_clean}\
-$character"""
+format = """$directory${custom.git_dirty}${custom.git_clean}$character"""
 
-# 3. DIRECTORY
 [directory]
-style = "bold #7aa2f7"  # Tokyo Night Blue
+style = "bold #7aa2f7"
 format = "[$path]($style) "
 truncation_length = 3
 truncation_symbol = "…/"
 
-# 4. DYNAMIC GIT BRANCH (With Icon)
-
-# Case A: Dirty -> RED Icon & Name
+# Dirty repo - red
 [custom.git_dirty]
 when = 'test -n "$(git status --porcelain 2>/dev/null)"'
 command = 'git branch --show-current'
-style = "bold #f7768e"  # Tokyo Night Red
-# Added the  icon here
-format = "[ $output]($style) "
+style = "bold #f7768e"
+format = "[󰘬 $output]($style) "
 
-# Case B: Clean -> PURPLE Icon & Name
+# Clean repo - purple
 [custom.git_clean]
-when = 'test -z "$(git status --porcelain 2>/dev/null)"'
+when = 'git rev-parse --git-dir &>/dev/null && test -z "$(git status --porcelain 2>/dev/null)"'
 command = 'git branch --show-current'
-style = "bold #bb9af7"  # Tokyo Night Purple
-# Added the  icon here
-format = "[ $output]($style) "
+style = "bold #bb9af7"
+format = "[󰘬 $output]($style) "
 
-# 5. THE ARROW PROMPT
 [character]
 success_symbol = "[➜](bold #c0caf5)"
 error_symbol = "[➜](bold #f7768e)"
 vimcmd_symbol = "[❮](bold #9ece6a)"
-
-# 6. DISABLE STANDARD MODULES
-[git_branch]
-disabled = true
-[git_status]
-disabled = true
 
 [package]
 disabled = true
@@ -55,4 +38,10 @@ disabled = true
 [python]
 disabled = true
 [rust]
+disabled = true
+[golang]
+disabled = true
+[git_branch]
+disabled = true
+[git_status]
 disabled = true
