@@ -11,6 +11,7 @@
 
   imports = [
     inputs.noctalia.homeModules.default
+    ../programs/nixvim.nix
   ];
 
   # Noctalia shell
@@ -34,6 +35,7 @@
   # Zsh config
   programs.zsh = {
     enable = true;
+    dotDir = "${config.xdg.configHome}/zsh";  # XDG-compliant path
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
@@ -48,10 +50,10 @@
 
     completionInit = ''
       autoload -Uz compinit
-      if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
-        compinit
+      if [[ -n ''${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+        compinit -d ''${ZDOTDIR}/.zcompdump
       else
-        compinit -C
+        compinit -C -d ''${ZDOTDIR}/.zcompdump
       fi
     '';
 
@@ -64,8 +66,8 @@
     shellAliases = {
       btw = "echo I use Nix btw";
       nrs = "sudo nixos-rebuild switch --flake ~/dotfiles |& nom";
-      nc = "vim /home/abhijay/dotfiles/modules";
-      nh = "vim /home/abhijay/dotfiles/modules/users/abhijay.nix";
+      nc = "nvim /home/abhijay/dotfiles/modules";
+      nh = "nvim /home/abhijay/dotfiles/modules/users/abhijay.nix";
       fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
     };
   };
@@ -90,19 +92,27 @@
     };
   };
 
-  # Pre-cache file list for rofi (runs on login, refreshes every 5 min)
-  systemd.user.services.rofi-file-cache = {
+  # Pre-warm rofi (file cache + drun cache)
+  systemd.user.services.rofi-prewarm = {
     Unit = {
-      Description = "Pre-generate rofi file search cache";
+      Description = "Pre-warm rofi caches";
+      After = [ "graphical-session.target" ];
     };
     Service = {
       Type = "oneshot";
-      ExecStart = "${pkgs.writeShellScript "rofi-cache-gen" ''
+      ExecStart = "${pkgs.writeShellScript "rofi-prewarm" ''
+        # Wait for desktop to settle
+        sleep 2
+
+        # Generate file cache
         ${pkgs.fd}/bin/fd --type f --hidden --max-depth 6 \
           --exclude .git --exclude node_modules \
           --exclude .cache --exclude .nix-defexpr --exclude .nix-profile \
           --exclude .local/share --exclude .mozilla --exclude .cargo \
           --base-directory "$HOME" > /tmp/rofi-file-cache 2>/dev/null
+
+        # Pre-warm rofi (launches and exits in ~100ms, barely visible)
+        ${pkgs.coreutils}/bin/timeout 0.1 ${pkgs.rofi}/bin/rofi -show drun || true
       ''}";
     };
     Install = {
@@ -110,13 +120,12 @@
     };
   };
 
-  systemd.user.timers.rofi-file-cache = {
+  systemd.user.timers.rofi-prewarm = {
     Unit = {
       Description = "Refresh rofi file cache periodically";
     };
     Timer = {
       OnUnitActiveSec = "5m";
-      OnBootSec = "1m";
     };
     Install = {
       WantedBy = [ "timers.target" ];
@@ -141,33 +150,6 @@
     };
   };
 
-  programs.vim = {
-    enable = true;
-    plugins = with pkgs.vimPlugins; [
-      vim-nix
-      auto-pairs
-      vim-lastplace
-    ];
-    extraConfig = ''
-      " Visuals
-      set number
-      syntax on
-
-      " Indentation
-      set autoindent
-      set smartindent
-
-      " Tabs & Spaces
-      set expandtab
-      set tabstop=2
-      set shiftwidth=2
-
-      " Searching
-      set ignorecase
-      set smartcase
-    '';
-  };
-
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
@@ -176,6 +158,7 @@
   programs.fzf = {
     enable = true;
     enableBashIntegration = true;
+    enableZshIntegration = true;
   };
 
   programs.direnv = {
@@ -206,7 +189,7 @@
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
-    EDITOR = "vim";
+    EDITOR = "nvim";
   };
 
   home.packages = with pkgs; [
@@ -247,7 +230,6 @@
     code-cursor
     go
     gnumake
-    neovim
     nil
     tinymist
     typst
