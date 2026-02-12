@@ -176,6 +176,15 @@
         settings = {
           defaults = {
             file_ignore_patterns = [ "node_modules" ".git/" ];
+            preview = {
+              filesize_limit = 1;
+              timeout = 250;
+              hide_on_startup = false;
+              treesitter = false;
+            };
+            layout_config = {
+              preview_cutoff = 120;
+            };
             mappings.i = {
               "<C-j>" = {
                 __raw = "require('telescope.actions').move_selection_next";
@@ -572,6 +581,7 @@
     extraPackages = with pkgs; [
       imagemagick
       curl
+      file
     ];
 
     # Lua rocks for image.nvim
@@ -594,6 +604,129 @@
       -- Brighter line numbers (comment color is #565f89)
       vim.api.nvim_set_hl(0, "LineNr", { fg = "#737aa2", bg = "none" })
       vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#a9b1d6", bg = "none", bold = true })
+
+      -- Telescope: Custom previewer for binary files
+      local previewers = require("telescope.previewers")
+      local putils = require("telescope.previewers.utils")
+
+      -- Image extensions
+      local image_extensions = { "png", "jpg", "jpeg", "gif", "bmp", "webp", "ico", "svg" }
+
+      -- Binary extensions to skip
+      local binary_extensions = {
+        "pdf", "zip", "tar", "gz", "bz2", "xz", "7z", "rar",
+        "mp4", "avi", "mkv", "mov", "mp3", "wav", "flac",
+        "exe", "dll", "so", "dylib", "bin", "o", "a"
+      }
+
+      local function get_extension(filepath)
+        return filepath:match("^.+%.(.+)$")
+      end
+
+      local function is_image(filepath)
+        local ext = get_extension(filepath)
+        if not ext then return false end
+        ext = ext:lower()
+        for _, img_ext in ipairs(image_extensions) do
+          if ext == img_ext then return true end
+        end
+        return false
+      end
+
+      local function is_binary(filepath)
+        local ext = get_extension(filepath)
+        if not ext then return false end
+        ext = ext:lower()
+        for _, bin_ext in ipairs(binary_extensions) do
+          if ext == bin_ext then return true end
+        end
+        return false
+      end
+
+      local function get_file_info(filepath)
+        local stat = vim.loop.fs_stat(filepath)
+        if not stat then return nil end
+
+        local size = stat.size
+        local size_str
+        if size < 1024 then
+          size_str = size .. " B"
+        elseif size < 1024 * 1024 then
+          size_str = string.format("%.1f KB", size / 1024)
+        else
+          size_str = string.format("%.1f MB", size / (1024 * 1024))
+        end
+
+        return size_str
+      end
+
+      local new_maker = function(filepath, bufnr, opts)
+        opts = opts or {}
+
+        -- Check if it's an image file
+        if is_image(filepath) then
+          local size = get_file_info(filepath)
+          local ext = get_extension(filepath) or "unknown"
+          vim.schedule(function()
+            vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "                           🖼️  Image File",
+              "",
+              "                           Type: " .. ext:upper(),
+              "                           Size: " .. (size or "Unknown"),
+              "",
+              "",
+              "                         Preview not available",
+            })
+            vim.api.nvim_buf_set_option(bufnr, 'filetype', 'text')
+          end)
+        -- Check if it's a known binary file
+        elseif is_binary(filepath) then
+          local size = get_file_info(filepath)
+          local ext = get_extension(filepath) or "unknown"
+          vim.schedule(function()
+            vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, {
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "                    📦 Binary File",
+              "",
+              "                    Type: " .. ext:upper(),
+              "                    Size: " .. (size or "Unknown"),
+              "",
+              "",
+              "                    Preview not available",
+            })
+            vim.api.nvim_buf_set_option(bufnr, 'filetype', 'text')
+          end)
+        else
+          -- Use default previewer for text files
+          previewers.buffer_previewer_maker(filepath, bufnr, opts)
+        end
+      end
+
+      -- Apply custom previewer to telescope
+      require("telescope").setup({
+        defaults = {
+          buffer_previewer_maker = new_maker,
+        },
+      })
 
       -- Image.nvim setup for image previews (uses Kitty graphics protocol)
       require("image").setup({

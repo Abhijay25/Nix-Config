@@ -176,6 +176,33 @@
     package = pkgs.vscode;
   };
 
+  programs.yazi = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      manager = {
+        ratio = [ 1 2 6 ];
+        sort_by = "natural";
+        sort_sensitive = false;
+        sort_reverse = false;
+        sort_dir_first = true;
+        linemode = "size";
+        show_hidden = false;
+        show_symlink = true;
+      };
+      preview = {
+        max_width = 4096;
+        max_height = 4096;
+      };
+    };
+    keymap = {
+      manager.prepend_keymap = [
+        { on = [ "q" ]; run = "quit"; desc = "Exit yazi"; }
+        { on = [ "<Esc>" ]; run = "escape"; desc = "Cancel operation"; }
+      ];
+    };
+  };
+
   # Config symlinks
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
@@ -210,7 +237,6 @@
     fd
     lazygit
     ripgrep
-    yazi
 
     # Quality of Life
     brightnessctl

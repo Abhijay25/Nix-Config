@@ -1,4 +1,4 @@
-{ ... }: {
+{ pkgs, ... }: {
   # PipeWire audio
   security.rtkit.enable = true;
 
@@ -17,5 +17,26 @@
         "default.clock.min-quantum" = 256;
       };
     };
+
+    # Allow volume above 100%
+    wireplumber.configPackages = [
+      (pkgs.writeTextDir "share/wireplumber/wireplumber.conf.d/10-volume-boost.conf" ''
+        monitor.alsa.rules = [
+          {
+            matches = [
+              {
+                node.name = "~alsa_output.*"
+              }
+            ]
+            actions = {
+              update-props = {
+                api.alsa.soft-mixer = true
+                api.alsa.ignore-dB = true
+              }
+            }
+          }
+        ]
+      '')
+    ];
   };
 }
