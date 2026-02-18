@@ -1,5 +1,5 @@
 { ... }: {
-  # GNOME Keyring for network credentials
+  # GNOME Keyring
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.login.enableGnomeKeyring = true;
 }

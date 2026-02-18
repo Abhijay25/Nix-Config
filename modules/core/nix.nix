@@ -6,8 +6,9 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
+    max-jobs = "auto";
 
-    # Security
+    # Restrict nix operations to wheel group
     allowed-users = [ "@wheel" ];
     trusted-users = [ "root" "@wheel" ];
 
@@ -22,6 +23,9 @@
     ];
   };
 
+  # Nix daemon runs at idle priority so rebuilds don't affect foreground tasks
+  nix.daemonCPUSchedPolicy = "idle";
+
   # Garbage collection
   nix.gc = {
     automatic = true;
@@ -29,6 +33,5 @@
     options = "--delete-older-than 14d";
   };
 
-  # System version (don't change)
   system.stateVersion = "25.11";
 }

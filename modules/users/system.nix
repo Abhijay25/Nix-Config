@@ -15,17 +15,4 @@
       tree
     ];
   };
-
-  # System-wide packages
-  environment.systemPackages = with pkgs; [
-    docker-compose
-    git
-    ghostty
-    vim
-    wget
-    nix-output-monitor
-  ];
-
-  # Timezone
-  time.timeZone = "Asia/Singapore";
 }

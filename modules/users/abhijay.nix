@@ -32,7 +32,7 @@
   services.network-manager-applet.enable = true;
   services.gnome-keyring.enable = true;
 
-  # Zsh config
+  # Zsh
   programs.zsh = {
     enable = true;
     dotDir = "${config.xdg.configHome}/zsh";  # XDG-compliant path
@@ -65,14 +65,15 @@
 
     shellAliases = {
       btw = "echo I use Nix btw";
-      nrs = "sudo nixos-rebuild switch --flake ~/dotfiles |& nom";
+      nrs = "sudo -v && nh os switch ~/dotfiles";
       nc = "nvim /home/abhijay/dotfiles/modules";
       nh = "nvim /home/abhijay/dotfiles/modules/users/abhijay.nix";
       fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
+      vpn = "nusvpn";
     };
   };
 
-  # Terminal customization
+  # Starship prompt
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
@@ -84,7 +85,7 @@
       Description = "Ghostty Terminal Daemon";
     };
     Service = {
-      ExecStart = "${pkgs.ghostty}/bin/ghostty --initial-window=false";
+      ExecStart = "${pkgs.ghostty}/bin/ghostty --initial-window=false"; # start server, no window
       Restart = "always";
     };
     Install = {
@@ -243,7 +244,6 @@
     libnotify
     pamixer
     playerctl
-    polkit_gnome
 
     # Utilities
     grim

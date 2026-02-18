@@ -1,7 +1,5 @@
 { pkgs, ... }: {
-  # PipeWire audio
-  security.rtkit.enable = true;
-
+  # PipeWire
   services.pipewire = {
     enable = true;
     pulse.enable = true;
@@ -9,7 +7,7 @@
     alsa.support32Bit = true;
     jack.enable = true;
 
-    # Low-latency audio config
+    # Low-latency config
     extraConfig.pipewire."92-low-latency" = {
       "context.properties" = {
         "default.clock.rate" = 48000;

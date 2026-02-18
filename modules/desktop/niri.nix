@@ -2,6 +2,6 @@
   # Niri compositor
   programs.niri.enable = true;
 
-  # X server (for XWayland compatibility)
+  # Required for XWayland
   services.xserver.enable = true;
 }

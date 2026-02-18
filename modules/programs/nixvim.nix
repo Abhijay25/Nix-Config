@@ -14,7 +14,7 @@
     viAlias = true;
     vimAlias = true;
 
-    # Colorscheme (TokyoNight to match Ghostty terminal)
+    # Colorscheme
     colorschemes.tokyonight = {
       enable = true;
       settings = {
@@ -30,7 +30,7 @@
       };
     };
 
-    # Global options (matching your vim config)
+    # Options
     opts = {
       # Visuals
       number = true;
@@ -71,6 +71,12 @@
       wrap = false;
       showmode = false;
       completeopt = "menuone,noselect";
+
+      # Code folding (for nvim-ufo)
+      foldcolumn = "1";
+      foldlevel = 99;
+      foldlevelstart = 99;
+      foldenable = true;
     };
 
     # Leader key
@@ -144,6 +150,16 @@
 
       # Git (lazygit integration)
       { mode = "n"; key = "<leader>gg"; action = "<cmd>lua require('toggleterm.terminal').Terminal:new({cmd='lazygit', direction='float'}):toggle()<CR>"; options.desc = "Lazygit"; }
+
+      # Trouble (diagnostics)
+      { mode = "n"; key = "<leader>xx"; action = "<cmd>Trouble diagnostics toggle<CR>"; options.desc = "Toggle diagnostics"; }
+      { mode = "n"; key = "<leader>xd"; action = "<cmd>Trouble diagnostics toggle filter.buf=0<CR>"; options.desc = "Buffer diagnostics"; }
+      { mode = "n"; key = "<leader>xq"; action = "<cmd>Trouble quickfix toggle<CR>"; options.desc = "Toggle quickfix"; }
+      { mode = "n"; key = "<leader>xl"; action = "<cmd>Trouble loclist toggle<CR>"; options.desc = "Toggle location list"; }
+
+      # Code folding (UFO)
+      { mode = "n"; key = "zR"; action = "<cmd>lua require('ufo').openAllFolds()<CR>"; options.desc = "Open all folds"; }
+      { mode = "n"; key = "zM"; action = "<cmd>lua require('ufo').closeAllFolds()<CR>"; options.desc = "Close all folds"; }
     ];
 
     # Plugins
@@ -163,6 +179,25 @@
             };
           };
           filters.dotfiles = false;
+          # Auto-reload on external changes (like VSCode)
+          reload_on_bufenter = true;
+          filesystem_watchers = {
+            enable = true;
+            debounce_delay = 50;
+            ignore_dirs = [ ".git" "node_modules" ];
+          };
+          sync_root_with_cwd = true;
+          respect_buf_cwd = true;
+          update_focused_file = {
+            enable = true;
+            update_root = true;
+          };
+          actions = {
+            open_file = {
+              quit_on_open = false;
+              window_picker.enable = true;
+            };
+          };
         };
       };
 
@@ -192,6 +227,11 @@
               "<C-k>" = {
                 __raw = "require('telescope.actions').move_selection_previous";
               };
+            };
+          };
+          pickers = {
+            find_files = {
+              hidden = true;
             };
           };
         };
@@ -406,6 +446,7 @@
             { __unkeyed-1 = "<leader>t"; group = "Terminal"; }
             { __unkeyed-1 = "<leader>c"; group = "Code"; }
             { __unkeyed-1 = "<leader>r"; group = "Rename"; }
+            { __unkeyed-1 = "<leader>x"; group = "Diagnostics"; }
           ];
         };
       };
@@ -458,6 +499,61 @@
 
       # Illuminate (highlight word under cursor)
       illuminate.enable = true;
+
+      # Trouble (better diagnostics/quickfix list)
+      trouble = {
+        enable = true;
+        settings = {
+          auto_close = true;
+          use_diagnostic_signs = true;
+        };
+      };
+
+      # Colorizer (show colors inline for hex/rgb codes)
+      nvim-colorizer = {
+        enable = true;
+        userDefaultOptions = {
+          RGB = true;
+          RRGGBB = true;
+          names = false;
+          RRGGBBAA = true;
+          rgb_fn = true;
+          hsl_fn = true;
+          css = true;
+          css_fn = true;
+          mode = "background";
+        };
+      };
+
+      # Auto-session (automatic session management)
+      auto-session = {
+        enable = true;
+        settings = {
+          auto_restore_enabled = true;
+          auto_save_enabled = true;
+          auto_session_suppress_dirs = [ "~/" "/tmp" ];
+        };
+      };
+
+      # UFO (better code folding)
+      nvim-ufo = {
+        enable = true;
+        settings = {
+          provider_selector = ''
+            function(bufnr, filetype, buftype)
+              return {'treesitter', 'indent'}
+            end
+          '';
+        };
+      };
+
+      # Auto-detect indentation
+      guess-indent = {
+        enable = true;
+        settings = {
+          auto_cmd = true;
+        };
+      };
 
       # Dashboard
       alpha = {
@@ -577,17 +673,16 @@
       };
     };
 
-    # Extra packages for image preview
+    # Extra packages
     extraPackages = with pkgs; [
       imagemagick
       curl
       file
     ];
 
-    # Lua rocks for image.nvim
     extraLuaPackages = ps: [ ps.magick ];
 
-    # Extra plugins not in nixvim
+    # Extra plugins
     extraPlugins = with pkgs.vimPlugins; [
       image-nvim
     ];
@@ -601,7 +696,7 @@
       vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
       vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
 
-      -- Brighter line numbers (comment color is #565f89)
+      -- Brighter line numbers
       vim.api.nvim_set_hl(0, "LineNr", { fg = "#737aa2", bg = "none" })
       vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#a9b1d6", bg = "none", bold = true })
 
@@ -721,14 +816,12 @@
         end
       end
 
-      -- Apply custom previewer to telescope
       require("telescope").setup({
         defaults = {
           buffer_previewer_maker = new_maker,
         },
       })
 
-      -- Image.nvim setup for image previews (uses Kitty graphics protocol)
       require("image").setup({
         backend = "kitty",
         integrations = {
@@ -759,7 +852,6 @@
         end,
       })
 
-      -- Auto-resize splits when window is resized
       vim.api.nvim_create_autocmd("VimResized", {
         callback = function()
           vim.cmd("tabdo wincmd =")
