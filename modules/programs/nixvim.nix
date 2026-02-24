@@ -100,7 +100,13 @@
       # Buffer navigation
       { mode = "n"; key = "<S-l>"; action = ":bnext<CR>"; options.silent = true; options.desc = "Next buffer"; }
       { mode = "n"; key = "<S-h>"; action = ":bprevious<CR>"; options.silent = true; options.desc = "Previous buffer"; }
-      { mode = "n"; key = "<leader>x"; action = ":bdelete<CR>"; options.silent = true; options.desc = "Close buffer"; }
+
+      # Buffer management
+      { mode = "n"; key = "<leader>bd"; action = ":bdelete<CR>"; options.silent = true; options.desc = "Delete buffer"; }
+      { mode = "n"; key = "<leader>bn"; action = ":bnext<CR>"; options.silent = true; options.desc = "Next buffer"; }
+      { mode = "n"; key = "<leader>bp"; action = ":bprevious<CR>"; options.silent = true; options.desc = "Previous buffer"; }
+      { mode = "n"; key = "<leader>bb"; action = "<cmd>Telescope buffers<CR>"; options.desc = "List buffers"; }
+      { mode = "n"; key = "<leader>bo"; action = ":%bdelete|edit#|bdelete#<CR>"; options.silent = true; options.desc = "Close other buffers"; }
 
       # Better indenting
       { mode = "v"; key = "<"; action = "<gv"; }
@@ -150,12 +156,6 @@
 
       # Git (lazygit integration)
       { mode = "n"; key = "<leader>gg"; action = "<cmd>lua require('toggleterm.terminal').Terminal:new({cmd='lazygit', direction='float'}):toggle()<CR>"; options.desc = "Lazygit"; }
-
-      # Trouble (diagnostics)
-      { mode = "n"; key = "<leader>xx"; action = "<cmd>Trouble diagnostics toggle<CR>"; options.desc = "Toggle diagnostics"; }
-      { mode = "n"; key = "<leader>xd"; action = "<cmd>Trouble diagnostics toggle filter.buf=0<CR>"; options.desc = "Buffer diagnostics"; }
-      { mode = "n"; key = "<leader>xq"; action = "<cmd>Trouble quickfix toggle<CR>"; options.desc = "Toggle quickfix"; }
-      { mode = "n"; key = "<leader>xl"; action = "<cmd>Trouble loclist toggle<CR>"; options.desc = "Toggle location list"; }
 
       # Code folding (UFO)
       { mode = "n"; key = "zR"; action = "<cmd>lua require('ufo').openAllFolds()<CR>"; options.desc = "Open all folds"; }
@@ -446,7 +446,7 @@
             { __unkeyed-1 = "<leader>t"; group = "Terminal"; }
             { __unkeyed-1 = "<leader>c"; group = "Code"; }
             { __unkeyed-1 = "<leader>r"; group = "Rename"; }
-            { __unkeyed-1 = "<leader>x"; group = "Diagnostics"; }
+            { __unkeyed-1 = "<leader>b"; group = "Buffers"; }
           ];
         };
       };
@@ -499,15 +499,6 @@
 
       # Illuminate (highlight word under cursor)
       illuminate.enable = true;
-
-      # Trouble (better diagnostics/quickfix list)
-      trouble = {
-        enable = true;
-        settings = {
-          auto_close = true;
-          use_diagnostic_signs = true;
-        };
-      };
 
       # Colorizer (show colors inline for hex/rgb codes)
       nvim-colorizer = {

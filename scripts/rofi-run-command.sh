@@ -18,7 +18,7 @@ else
     tail -n "$MAX_HISTORY" "$HISTORY_FILE" > "$HISTORY_FILE.tmp" && mv "$HISTORY_FILE.tmp" "$HISTORY_FILE"
 
     # Execute command
-    nohup ghostty -e bash -c "$1; echo ''; echo 'Press Enter to close...'; read" >/dev/null 2>&1 &
+    nohup ghostty -e zsh -ic "$1; exec zsh -i" >/dev/null 2>&1 &
     disown
     exit 0
 fi

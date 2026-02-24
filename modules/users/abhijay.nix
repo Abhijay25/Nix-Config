@@ -66,8 +66,6 @@
     shellAliases = {
       btw = "echo I use Nix btw";
       nrs = "sudo -v && nh os switch ~/dotfiles";
-      nc = "nvim /home/abhijay/dotfiles/modules";
-      nh = "nvim /home/abhijay/dotfiles/modules/users/abhijay.nix";
       fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
       vpn = "nusvpn";
     };
@@ -180,6 +178,7 @@
   programs.yazi = {
     enable = true;
     enableZshIntegration = true;
+    shellWrapperName = "y";
     settings = {
       manager = {
         ratio = [ 1 2 6 ];
@@ -237,6 +236,7 @@
     btop
     fd
     lazygit
+    nh
     ripgrep
 
     # Quality of Life
@@ -274,7 +274,6 @@
 
     # Applications
     localsend
-    obsidian
     telegram-desktop
     vesktop
     spotify
