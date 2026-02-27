@@ -262,6 +262,7 @@
           rust
           toml
           typescript
+          typst
           yaml
         ];
       };
