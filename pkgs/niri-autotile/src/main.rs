@@ -230,8 +230,11 @@ impl NiriContext {
                     }
                 }
 
-                // Fix viewport: focusing left resets scroll to x=0, then focusing
-                // right keeps both 50% columns visible since they fit the viewport.
+                // Wait for niri to apply the resizes before correcting the viewport.
+                // Without this, the focus dance runs against stale window sizes.
+                std::thread::sleep(std::time::Duration::from_millis(30));
+                // Focus left resets scroll to x=0, then right refocuses the new
+                // window. Both 50% columns fit the viewport so scroll stays minimal.
                 let _ = self.send_action(Action::FocusColumnLeft {});
                 let _ = self.send_action(Action::FocusColumnRight {});
             }
