@@ -290,23 +290,33 @@ impl NiriContext {
                         affected_workspaces.push(pos.workspace_id);
                     }
                 } else if let Some(ws_id) = ws_id_opt {
-                    // Always re-evaluate the destination workspace, even if layout
-                    // position isn't assigned yet (e.g. window just moved workspaces)
-                    affected_workspaces.push(ws_id);
-
                     if let Some((col, tile)) = window.layout.pos_in_scrolling_layout {
                         let new_pos = WindowPosition { workspace_id: ws_id, column: col, tile };
                         if old_pos != Some(new_pos) {
+                            // Position or workspace changed — re-evaluate affected workspaces.
                             self.tracked_window_positions.insert(id, new_pos);
+                            affected_workspaces.push(ws_id);
                             if let Some(old) = old_pos {
                                 if old.workspace_id != ws_id {
                                     affected_workspaces.push(old.workspace_id);
                                 }
                             }
                         }
-                    } else if let Some(old) = old_pos {
-                        if old.workspace_id != ws_id {
-                            affected_workspaces.push(old.workspace_id);
+                        // If position is unchanged we skip re-evaluation. This prevents
+                        // niri's follow-up events (e.g. after our own MaximizeColumn)
+                        // from triggering a spurious re-evaluation that sees stale state
+                        // and bounces the window back to 50%.
+                    } else {
+                        // No layout position yet. Only re-evaluate if this window is new
+                        // to this workspace (just opened or just moved here).
+                        let old_ws = old_pos.map(|p| p.workspace_id);
+                        if old_ws != Some(ws_id) {
+                            affected_workspaces.push(ws_id);
+                            if let Some(old) = old_pos {
+                                if old.workspace_id != ws_id {
+                                    affected_workspaces.push(old.workspace_id);
+                                }
+                            }
                         }
                     }
                 }
@@ -330,6 +340,16 @@ impl NiriContext {
                 if let Some(pos) = self.tracked_window_positions.remove(&id) {
                     info!("window {} closed, re-evaluating ws {}", id, pos.workspace_id);
                     affected_workspaces.push(pos.workspace_id);
+                } else {
+                    // Window was never tracked (never received a layout position via
+                    // WindowOpenedOrChanged). Re-evaluate all workspaces with tracked
+                    // windows as a fallback so the remaining window gets maximized.
+                    let ws_ids: std::collections::HashSet<u64> =
+                        self.tracked_window_positions.values().map(|p| p.workspace_id).collect();
+                    if !ws_ids.is_empty() {
+                        debug!("untracked window {} closed; re-evaluating {} known workspaces", id, ws_ids.len());
+                        affected_workspaces.extend(ws_ids);
+                    }
                 }
             }
 
