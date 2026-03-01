@@ -1,0 +1,11 @@
+[package]
+name = "niri-autotile"
+version = "0.1.0"
+edition = "2021"
+description = "Auto-tiling daemon for niri: 1 window maximized, 2 windows 50/50, 3+ scrollable"
+
+[dependencies]
+niri-ipc = "=25.8.0"
+anyhow = "1"
+log = "0.4"
+env_logger = "0.11"

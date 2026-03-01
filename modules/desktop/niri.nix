@@ -4,4 +4,5 @@
 
   # Required for XWayland
   services.xserver.enable = true;
+
 }

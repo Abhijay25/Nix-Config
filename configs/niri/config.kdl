@@ -67,8 +67,8 @@ binds {
 	Mod+K { focus-window-up; }
 
 	// Moving Windows
-	Mod+Shift+Left { move-column-left; }
-	Mod+Shift+Right { move-column-right; }
+	Mod+Shift+Left { move-window-to-monitor-left; }
+	Mod+Shift+Right { move-window-to-monitor-right; }
 	Mod+Shift+Down { move-window-down; }
 	Mod+Shift+Up {move-window-up; }
 
@@ -140,7 +140,7 @@ layout {
 	}
 
 	// Default Window Proportion
-	default-column-width { proportion 1.00; }
+	default-column-width { proportion 1.0; }
 
 	// Window Proportion Presets
 	preset-column-widths {

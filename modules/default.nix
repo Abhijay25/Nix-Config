@@ -15,6 +15,7 @@
 
     # Desktop
     ./desktop/niri.nix
+    ./desktop/niri-autotile.nix
     ./desktop/sddm.nix
     ./desktop/portal.nix
     ./desktop/theming.nix
