@@ -8,7 +8,7 @@
     partOf = [ "graphical-session.target" ];
 
     serviceConfig = {
-      ExecStart = "${niri-autotile}/bin/niri-autotile";
+      ExecStart = "${pkgs.niri-autotile}/bin/niri-autotile";
       Restart = "on-failure";
       RestartSec = "5s";
 
