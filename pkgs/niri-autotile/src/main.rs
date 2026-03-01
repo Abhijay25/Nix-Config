@@ -230,6 +230,11 @@ impl NiriContext {
                     }
                 }
 
+                // The viewport scrolled right when we focused the right column to
+                // resize it. Focusing left is the only reliable way to reset it —
+                // attempting to refocus right afterwards causes niri to see window2
+                // as already visible from the old scrolled position and not correct.
+                let _ = self.send_action(Action::FocusColumnLeft {});
             }
             _ => {
                 // 3+ columns: new windows open at default-column-width (1.0), scrollable
