@@ -5,7 +5,7 @@ edition = "2021"
 description = "Auto-tiling daemon for niri: 1 window maximized, 2 windows 50/50, 3+ scrollable"
 
 [dependencies]
-niri-ipc = "=25.11.0"
+niri-ipc = "=25.11"
 anyhow = "1"
 log = "0.4"
 env_logger = "0.11"
