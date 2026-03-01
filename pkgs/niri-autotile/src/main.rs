@@ -230,13 +230,6 @@ impl NiriContext {
                     }
                 }
 
-                // send_action blocks until niri responds Handled, so resizes are
-                // already applied before we get here. The sleep is between the two
-                // focus calls to prevent niri from batching both viewport scrolls
-                // into one frame and discarding the left scroll.
-                let _ = self.send_action(Action::FocusColumnLeft {});
-                std::thread::sleep(std::time::Duration::from_millis(16));
-                let _ = self.send_action(Action::FocusColumnRight {});
             }
             _ => {
                 // 3+ columns: new windows open at default-column-width (1.0), scrollable
