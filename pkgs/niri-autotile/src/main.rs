@@ -288,17 +288,24 @@ impl NiriContext {
                         self.tracked_window_positions.remove(&id);
                         affected_workspaces.push(pos.workspace_id);
                     }
-                } else if let (Some(ws_id), Some((col, tile))) =
-                    (ws_id_opt, window.layout.pos_in_scrolling_layout)
-                {
-                    let new_pos = WindowPosition { workspace_id: ws_id, column: col, tile };
-                    if old_pos != Some(new_pos) {
-                        self.tracked_window_positions.insert(id, new_pos);
-                        affected_workspaces.push(ws_id);
-                        if let Some(old) = old_pos {
-                            if old.workspace_id != ws_id {
-                                affected_workspaces.push(old.workspace_id);
+                } else if let Some(ws_id) = ws_id_opt {
+                    // Always re-evaluate the destination workspace, even if layout
+                    // position isn't assigned yet (e.g. window just moved workspaces)
+                    affected_workspaces.push(ws_id);
+
+                    if let Some((col, tile)) = window.layout.pos_in_scrolling_layout {
+                        let new_pos = WindowPosition { workspace_id: ws_id, column: col, tile };
+                        if old_pos != Some(new_pos) {
+                            self.tracked_window_positions.insert(id, new_pos);
+                            if let Some(old) = old_pos {
+                                if old.workspace_id != ws_id {
+                                    affected_workspaces.push(old.workspace_id);
+                                }
                             }
+                        }
+                    } else if let Some(old) = old_pos {
+                        if old.workspace_id != ws_id {
+                            affected_workspaces.push(old.workspace_id);
                         }
                     }
                 }
