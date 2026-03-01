@@ -218,7 +218,15 @@ impl NiriContext {
 
                 info!("workspace {}: two columns -> resizing both to 50%", ws_id);
 
-                for &col_idx in &cols_vec {
+                // Resize right column first, then left. When we focus the left
+                // column (100% wide, starting at x=0), niri is forced to scroll
+                // the viewport to x=0 — it's the only valid position to fully
+                // show a full-width column at x=0. After resizing left to 50%,
+                // both columns fit within the screen width (~952px each + gaps).
+                // FocusColumnRight then lands on the right column with no scroll
+                // needed (it's already visible), ending with focus on the new
+                // window and both windows on screen.
+                for &col_idx in cols_vec.iter().rev() {
                     if let Some(w) = tiled_windows.iter().find(|w| {
                         w.layout.pos_in_scrolling_layout.map(|(c, _)| c) == Some(col_idx)
                     }) {
@@ -230,11 +238,9 @@ impl NiriContext {
                     }
                 }
 
-                // The viewport scrolled right when we focused the right column to
-                // resize it. Focusing left is the only reliable way to reset it —
-                // attempting to refocus right afterwards causes niri to see window2
-                // as already visible from the old scrolled position and not correct.
-                let _ = self.send_action(Action::FocusColumnLeft {});
+                // Viewport is now at x=0 (left column reset it). Right column is
+                // fully visible, so this focus change requires no scroll.
+                let _ = self.send_action(Action::FocusColumnRight {});
             }
             _ => {
                 // 3+ columns: new windows open at default-column-width (1.0), scrollable
