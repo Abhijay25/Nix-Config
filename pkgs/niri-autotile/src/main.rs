@@ -230,12 +230,12 @@ impl NiriContext {
                     }
                 }
 
-                // Wait for niri to apply the resizes before correcting the viewport.
-                // Without this, the focus dance runs against stale window sizes.
-                std::thread::sleep(std::time::Duration::from_millis(30));
-                // Focus left resets scroll to x=0, then right refocuses the new
-                // window. Both 50% columns fit the viewport so scroll stays minimal.
+                // send_action blocks until niri responds Handled, so resizes are
+                // already applied before we get here. The sleep is between the two
+                // focus calls to prevent niri from batching both viewport scrolls
+                // into one frame and discarding the left scroll.
                 let _ = self.send_action(Action::FocusColumnLeft {});
+                std::thread::sleep(std::time::Duration::from_millis(16));
                 let _ = self.send_action(Action::FocusColumnRight {});
             }
             _ => {
