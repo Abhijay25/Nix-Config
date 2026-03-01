@@ -61,11 +61,15 @@
       export ZSH_DISABLE_COMPFIX="true"
       zstyle ':completion:*' menu select
       zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+      # Move fzf file-search from Ctrl+T (taken by ghostty new-tab) to Ctrl+F
+      bindkey -r '^T'
+      bindkey '^F' fzf-file-widget
     '';
 
     shellAliases = {
       btw = "echo I use Nix btw";
       nrs = "sudo -v && nh os switch ~/dotfiles";
+      flakeupdate = "~/dotfiles/scripts/update-flake.sh";
       fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
       vpn = "nusvpn";
     };
