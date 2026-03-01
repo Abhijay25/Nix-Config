@@ -238,8 +238,13 @@ impl NiriContext {
                     }
                 }
 
-                // Viewport is now at x=0 (left column reset it). Right column is
-                // fully visible, so this focus change requires no scroll.
+                // Viewport is now at x=0 (left column reset it). However
+                // FocusColumnRight uses niri's internal layout positions, which
+                // may not yet reflect col 1's new position (it shifts left when
+                // col 0 shrinks). A round-trip query forces niri to finish all
+                // pending layout recalculation before we send the focus action,
+                // so col 1's position is correct and no viewport scroll occurs.
+                let _ = self.query_full_state();
                 let _ = self.send_action(Action::FocusColumnRight {});
             }
             _ => {
