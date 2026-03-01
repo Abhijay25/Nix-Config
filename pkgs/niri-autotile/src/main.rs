@@ -224,8 +224,9 @@ impl NiriContext {
                         w.layout.pos_in_scrolling_layout.map(|(c, _)| c) == Some(col_idx)
                     }) {
                         self.send_action(Action::FocusWindow { id: w.id })?;
+                        // SetProportion takes a percentage (0–100), not a fraction
                         self.send_action(Action::SetColumnWidth {
-                            change: SizeChange::SetProportion(HALF_PROPORTION),
+                            change: SizeChange::SetProportion(50.0),
                         })?;
                     }
                 }
