@@ -4,3 +4,6 @@ background-opacity = 0.8
 background-blur-radius = 20
 
 resize-overlay = never
+
+keybind = ctrl+t=new_tab
+keybind = ctrl+q=close_surface
