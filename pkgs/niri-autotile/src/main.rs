@@ -218,15 +218,7 @@ impl NiriContext {
 
                 info!("workspace {}: two columns -> resizing both to 50%", ws_id);
 
-                // Resize right column first, then left. When we focus the left
-                // column (100% wide, starting at x=0), niri is forced to scroll
-                // the viewport to x=0 — it's the only valid position to fully
-                // show a full-width column at x=0. After resizing left to 50%,
-                // both columns fit within the screen width (~952px each + gaps).
-                // FocusColumnRight then lands on the right column with no scroll
-                // needed (it's already visible), ending with focus on the new
-                // window and both windows on screen.
-                for &col_idx in cols_vec.iter().rev() {
+                for &col_idx in &cols_vec {
                     if let Some(w) = tiled_windows.iter().find(|w| {
                         w.layout.pos_in_scrolling_layout.map(|(c, _)| c) == Some(col_idx)
                     }) {
@@ -238,14 +230,11 @@ impl NiriContext {
                     }
                 }
 
-                // Viewport is now at x=0 (left column reset it). However
-                // FocusColumnRight uses niri's internal layout positions, which
-                // may not yet reflect col 1's new position (it shifts left when
-                // col 0 shrinks). A round-trip query forces niri to finish all
-                // pending layout recalculation before we send the focus action,
-                // so col 1's position is correct and no viewport scroll occurs.
-                let _ = self.query_full_state();
-                let _ = self.send_action(Action::FocusColumnRight {});
+                // After resizing both columns the viewport is scrolled right
+                // (niri moved it to show col 1 at full width). FocusColumnLeft
+                // resets it to x=0, making both 50%-wide columns visible.
+                // Focus lands on the left (old) window as a side effect.
+                let _ = self.send_action(Action::FocusColumnLeft {});
             }
             _ => {
                 // 3+ columns: new windows open at default-column-width (1.0), scrollable
