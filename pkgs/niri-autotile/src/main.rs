@@ -230,11 +230,14 @@ impl NiriContext {
                     }
                 }
 
-                // After resizing both columns the viewport is scrolled right
-                // (niri moved it to show col 1 at full width). FocusColumnLeft
-                // resets it to x=0, making both 50%-wide columns visible.
-                // Focus lands on the left (old) window as a side effect.
+                // After resizing both columns the viewport is scrolled right.
+                // FocusColumnLeft resets it so both 50%-wide columns are visible.
+                // Col 1 (the new window) is now at ~x=962–1914, fully within the
+                // 1920px screen, so FocusColumnRight moves focus to it without
+                // any further scroll. This also ensures window 3+ opens to the
+                // right of the newest window rather than inserting in the middle.
                 let _ = self.send_action(Action::FocusColumnLeft {});
+                let _ = self.send_action(Action::FocusColumnRight {});
             }
             _ => {
                 // 3+ columns: new windows open at default-column-width (1.0), scrollable
