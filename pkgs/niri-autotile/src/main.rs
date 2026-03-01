@@ -217,7 +217,6 @@ impl NiriContext {
                 }
 
                 info!("workspace {}: two columns -> resizing both to 50%", ws_id);
-                let original_focus = self.query_focused_window().ok().flatten();
 
                 for &col_idx in &cols_vec {
                     if let Some(w) = tiled_windows.iter().find(|w| {
@@ -231,9 +230,10 @@ impl NiriContext {
                     }
                 }
 
-                if let Some(orig_id) = original_focus {
-                    let _ = self.send_action(Action::FocusWindow { id: orig_id });
-                }
+                // Fix viewport: focusing left resets scroll to x=0, then focusing
+                // right keeps both 50% columns visible since they fit the viewport.
+                let _ = self.send_action(Action::FocusColumnLeft {});
+                let _ = self.send_action(Action::FocusColumnRight {});
             }
             _ => {
                 // 3+ columns: new windows open at default-column-width (1.0), scrollable
