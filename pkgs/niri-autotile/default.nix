@@ -1,14 +1,15 @@
-{ lib, rustPlatform }:
+{ craneLib }:
 
-rustPlatform.buildRustPackage {
-  pname = "niri-autotile";
-  version = "0.1.0";
-  src = ./.;
-
-  cargoLock.lockFile = ./Cargo.lock;
-
-  meta = {
-    description = "Auto-tiling daemon for niri";
-    mainProgram = "niri-autotile";
+let
+  common = {
+    src = ./.;
+    strictDeps = true;
   };
-}
+
+  # Dependencies compiled separately — cached until Cargo.lock changes
+  cargoArtifacts = craneLib.buildDepsOnly common;
+in
+# Only this derivation rebuilds when main.rs changes
+craneLib.buildPackage (common // {
+  inherit cargoArtifacts;
+})

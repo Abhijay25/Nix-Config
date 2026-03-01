@@ -1,8 +1,5 @@
 { pkgs, ... }:
 
-let
-  niri-autotile = pkgs.callPackage ../../pkgs/niri-autotile { };
-in
 {
   systemd.user.services.niri-autotile = {
     description = "Niri auto-tiling daemon";
