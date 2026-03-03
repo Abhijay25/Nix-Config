@@ -155,7 +155,13 @@ impl NiriContext {
         if original_focus != Some(target_window_id) {
             self.send_action(Action::FocusWindow { id: target_window_id })?;
         }
-        self.send_action(Action::MaximizeColumn {})?;
+        // Use SetColumnWidth instead of MaximizeColumn (which is a toggle).
+        // If two evaluations fire back-to-back (a pre-close layout event followed
+        // by WindowClosed), MaximizeColumn would be called twice and toggle off.
+        // SetColumnWidth is idempotent: calling it twice still yields 100% width.
+        self.send_action(Action::SetColumnWidth {
+            change: SizeChange::SetProportion(100.0),
+        })?;
         if let Some(orig_id) = original_focus {
             if orig_id != target_window_id {
                 let _ = self.send_action(Action::FocusWindow { id: orig_id });

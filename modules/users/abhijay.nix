@@ -274,7 +274,6 @@
     papirus-icon-theme
     swww
     util-linux
-    quickshell
 
     # Applications
     localsend
