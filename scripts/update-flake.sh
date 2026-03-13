@@ -5,7 +5,7 @@ DOTFILES="$HOME/dotfiles"
 CARGO_TOML="$DOTFILES/pkgs/niri-autotile/Cargo.toml"
 
 echo "Updating flake inputs..."
-nix flake update "$DOTFILES"
+nix flake update --flake "$DOTFILES"
 
 echo "Reading niri version from updated nixpkgs..."
 NIRI_VERSION=$(nix eval --raw "$DOTFILES#nixosConfigurations.doge.pkgs.niri.version")

@@ -43,30 +43,12 @@ impl NiriContext {
         match reply {
             Ok(Response::Handled) => Ok(()),
             Ok(other) => {
-                warn!(
-                    "unexpected response from niri for action {:?}: {:?}",
-                    action, other
-                );
+                warn!("unexpected response for action {:?}: {:?}", action, other);
                 Ok(())
             }
             Err(msg) => {
-                error!("niri returned error for action {:?}: {}", action, msg);
+                error!("niri error for action {:?}: {}", action, msg);
                 Ok(())
-            }
-        }
-    }
-
-    fn query_focused_window(&mut self) -> Result<Option<u64>> {
-        let reply = self
-            .request_socket
-            .send(Request::FocusedWindow)
-            .context("querying focused window")?;
-        match reply {
-            Ok(Response::FocusedWindow(Some(w))) => Ok(Some(w.id)),
-            Ok(Response::FocusedWindow(None)) => Ok(None),
-            _ => {
-                warn!("unexpected response when querying focused window");
-                Ok(None)
             }
         }
     }
@@ -117,11 +99,7 @@ impl NiriContext {
             _ => anyhow::bail!("failed to query workspaces"),
         };
 
-        Ok(NiriState {
-            windows,
-            output_widths,
-            ws_outputs,
-        })
+        Ok(NiriState { windows, output_widths, ws_outputs })
     }
 
     fn window_proportion(&self, window_id: u64, state: &NiriState, windows_map: &HashMap<u64, &Window>) -> Option<f64> {
@@ -129,18 +107,13 @@ impl NiriContext {
         let ws_id = w.workspace_id?;
         let output_name = state.ws_outputs.get(&ws_id)?;
         let &output_width = state.output_widths.get(output_name)?;
-        if output_width <= 0.0 {
-            return None;
-        }
+        if output_width <= 0.0 { return None; }
         Some(w.layout.tile_size.0 / output_width)
     }
 
     fn is_maximized(&self, window_id: u64, state: &NiriState, windows_map: &HashMap<u64, &Window>) -> bool {
         self.window_proportion(window_id, state, windows_map)
-            .map(|r| {
-                debug!("window {} proportion={:.2}", window_id, r);
-                r > MAXIMIZED_RATIO_THRESHOLD
-            })
+            .map(|r| { debug!("window {} proportion={:.2}", window_id, r); r > MAXIMIZED_RATIO_THRESHOLD })
             .unwrap_or(false)
     }
 
@@ -148,26 +121,6 @@ impl NiriContext {
         self.window_proportion(window_id, state, windows_map)
             .map(|r| (r - target).abs() < PROPORTION_TOLERANCE)
             .unwrap_or(false)
-    }
-
-    fn perform_maximize_action(&mut self, target_window_id: u64) -> Result<()> {
-        let original_focus = self.query_focused_window().ok().flatten();
-        if original_focus != Some(target_window_id) {
-            self.send_action(Action::FocusWindow { id: target_window_id })?;
-        }
-        // Use SetColumnWidth instead of MaximizeColumn (which is a toggle).
-        // If two evaluations fire back-to-back (a pre-close layout event followed
-        // by WindowClosed), MaximizeColumn would be called twice and toggle off.
-        // SetColumnWidth is idempotent: calling it twice still yields 100% width.
-        self.send_action(Action::SetColumnWidth {
-            change: SizeChange::SetProportion(100.0),
-        })?;
-        if let Some(orig_id) = original_focus {
-            if orig_id != target_window_id {
-                let _ = self.send_action(Action::FocusWindow { id: orig_id });
-            }
-        }
-        Ok(())
     }
 
     fn evaluate_workspace(
@@ -193,22 +146,23 @@ impl NiriContext {
             }
         }
 
-        let column_count = unique_columns.len();
-
-        match column_count {
+        match unique_columns.len() {
             0 => {}
             1 => {
                 let win_id = tiled_windows[0].id;
                 if !self.is_maximized(win_id, state, windows_map) {
-                    info!("workspace {}: single column -> maximizing window {}", ws_id, win_id);
-                    self.perform_maximize_action(win_id)?;
+                    info!("workspace {}: single column -> maximizing", ws_id);
+                    // 2 IPC calls: focus + set width
+                    self.send_action(Action::FocusWindow { id: win_id })?;
+                    self.send_action(Action::SetColumnWidth {
+                        change: SizeChange::SetProportion(100.0),
+                    })?;
                 }
             }
             2 => {
                 let mut cols_vec: Vec<usize> = unique_columns.into_iter().collect();
                 cols_vec.sort_unstable();
 
-                // Skip if both columns are already at ~50%
                 let already_correct = cols_vec.iter().all(|&col_idx| {
                     tiled_windows
                         .iter()
@@ -224,27 +178,21 @@ impl NiriContext {
 
                 info!("workspace {}: two columns -> resizing both to 50%", ws_id);
 
+                // 5 IPC calls: (focus + set width) * 2 + center
                 for &col_idx in &cols_vec {
                     if let Some(w) = tiled_windows.iter().find(|w| {
                         w.layout.pos_in_scrolling_layout.map(|(c, _)| c) == Some(col_idx)
                     }) {
                         self.send_action(Action::FocusWindow { id: w.id })?;
-                        // SetProportion takes a percentage (0–100), not a fraction
                         self.send_action(Action::SetColumnWidth {
                             change: SizeChange::SetProportion(50.0),
                         })?;
                     }
                 }
-
-                // After resizing both columns the viewport is scrolled right
-                // (niri moved it to show col 1 at full width). FocusColumnLeft
-                // resets it to x=0, making both 50%-wide columns visible.
-                // Focus lands on the left (old) window as a side effect.
-                let _ = self.send_action(Action::FocusColumnLeft {});
+                let _ = self.send_action(Action::CenterVisibleColumns {});
             }
             _ => {
-                // 3+ columns: new windows open at default-column-width (1.0), scrollable
-                debug!("workspace {}: {} columns, doing nothing", ws_id, column_count);
+                debug!("workspace {}: {} columns, doing nothing", ws_id, unique_columns.len());
             }
         }
 
@@ -299,7 +247,6 @@ impl NiriContext {
                     if let Some((col, tile)) = window.layout.pos_in_scrolling_layout {
                         let new_pos = WindowPosition { workspace_id: ws_id, column: col, tile };
                         if old_pos != Some(new_pos) {
-                            // Position or workspace changed — re-evaluate affected workspaces.
                             self.tracked_window_positions.insert(id, new_pos);
                             affected_workspaces.push(ws_id);
                             if let Some(old) = old_pos {
@@ -308,13 +255,7 @@ impl NiriContext {
                                 }
                             }
                         }
-                        // If position is unchanged we skip re-evaluation. This prevents
-                        // niri's follow-up events (e.g. after our own MaximizeColumn)
-                        // from triggering a spurious re-evaluation that sees stale state
-                        // and bounces the window back to 50%.
                     } else {
-                        // No layout position yet. Only re-evaluate if this window is new
-                        // to this workspace (just opened or just moved here).
                         let old_ws = old_pos.map(|p| p.workspace_id);
                         if old_ws != Some(ws_id) {
                             affected_workspaces.push(ws_id);
@@ -347,9 +288,6 @@ impl NiriContext {
                     info!("window {} closed, re-evaluating ws {}", id, pos.workspace_id);
                     affected_workspaces.push(pos.workspace_id);
                 } else {
-                    // Window was never tracked (never received a layout position via
-                    // WindowOpenedOrChanged). Re-evaluate all workspaces with tracked
-                    // windows as a fallback so the remaining window gets maximized.
                     let ws_ids: std::collections::HashSet<u64> =
                         self.tracked_window_positions.values().map(|p| p.workspace_id).collect();
                     if !ws_ids.is_empty() {

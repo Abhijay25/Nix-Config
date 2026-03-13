@@ -276,6 +276,12 @@
     util-linux
 
     # Applications
+    (chromium.override {
+      commandLineArgs = [
+        "--ozone-platform=wayland"
+        "--enable-features=UseOzonePlatform"
+      ];
+    })
     localsend
     telegram-desktop
     vesktop
