@@ -40,6 +40,7 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 14d";
+    persistent = false;
   };
 
   system.stateVersion = "25.11";

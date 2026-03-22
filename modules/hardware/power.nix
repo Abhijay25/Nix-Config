@@ -63,4 +63,24 @@
 
   # ThinkPad-specific undervolting guard
   services.throttled.enable = true;
+
+  # Disable USB wake from suspend (prevents USB subsystem battery drain in S3)
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="pci", ATTR{power/wakeup}="disabled", DRIVER=="xhci_hcd"
+  '';
+
+  # Ensure deep sleep (S3) is used, not s2idle
+  boot.kernelParams = [ "mem_sleep_default=deep" ];
+
+  # Suspend-then-hibernate: suspends to RAM, then hibernates after 30 min
+  # NOTE: Hibernate requires swap >= RAM. Current swap (4GB) < RAM (7.5GB).
+  # Uncomment the below after resizing swap partition to 8GB+.
+  # systemd.sleep.extraConfig = ''
+  #   HibernateDelaySec=30min
+  # '';
+  # services.logind.lidSwitch = "suspend-then-hibernate";
+  # boot.resumeDevice = "/dev/disk/by-uuid/e8c93361-536b-47e6-beba-2a597d1b2a08";
+
+  # For now, just use regular suspend on lid close
+  services.logind.lidSwitch = "suspend";
 }

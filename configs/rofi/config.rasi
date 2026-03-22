@@ -14,7 +14,7 @@ configuration {
     matching: "fuzzy";
     disable-history: true;
     drun-use-desktop-cache: true;
-    drun-reload-desktop-cache: true;
+    drun-reload-desktop-cache: false;
     max-history-size: 10;
 }
 
