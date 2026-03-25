@@ -25,10 +25,6 @@
       "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
     ];
 
-    # Evaluation optimizations
-    eval-cache = true;
-    keep-outputs = false;
-    keep-derivations = false;
   };
 
   # Use batch scheduling for good balance between rebuild speed and system responsiveness

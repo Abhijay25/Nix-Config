@@ -689,12 +689,11 @@
       vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
 
       -- Brighter line numbers
-      vim.api.nvim_set_hl(0, "LineNr", { fg = "#737aa2", bg = "none" })
+      vim.api.nvim_set_hl(0, "LineNr", { fg = "#8890b4", bg = "none" })
       vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#a9b1d6", bg = "none", bold = true })
 
       -- Telescope: Custom previewer for binary files
       local previewers = require("telescope.previewers")
-      local putils = require("telescope.previewers.utils")
 
       -- Image extensions
       local image_extensions = { "png", "jpg", "jpeg", "gif", "bmp", "webp", "ico", "svg" }
@@ -731,7 +730,7 @@
       end
 
       local function get_file_info(filepath)
-        local stat = vim.loop.fs_stat(filepath)
+        local stat = vim.uv.fs_stat(filepath)
         if not stat then return nil end
 
         local size = stat.size
@@ -774,7 +773,7 @@
               "",
               "                         Preview not available",
             })
-            vim.api.nvim_buf_set_option(bufnr, 'filetype', 'text')
+            vim.bo[bufnr].filetype = 'text'
           end)
         -- Check if it's a known binary file
         elseif is_binary(filepath) then
@@ -800,7 +799,7 @@
               "",
               "                    Preview not available",
             })
-            vim.api.nvim_buf_set_option(bufnr, 'filetype', 'text')
+            vim.bo[bufnr].filetype = 'text'
           end)
         else
           -- Use default previewer for text files

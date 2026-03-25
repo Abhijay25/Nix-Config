@@ -217,6 +217,7 @@
   # XDG user directories
   xdg.enable = true;
   xdg.userDirs.enable = true;
+  xdg.userDirs.setSessionVariables = false;
 
   home.sessionVariables = {
     NIXOS_OZONE_WL = "1";
@@ -269,7 +270,6 @@
 
     # Ricing & Themes
     adwaita-icon-theme
-    expect
     fastfetch
     papirus-icon-theme
     swww
@@ -291,8 +291,6 @@
       commandLineArgs = [
         "--enable-features=UseOzonePlatform"
         "--ozone-platform=wayland"
-        "--password-store=basic"
-        "--ignore-gpu-blocklist"
         "--enable-gpu-rasterization"
         "--enable-zero-copy"
         "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization"

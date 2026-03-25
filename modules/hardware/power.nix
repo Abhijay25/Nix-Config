@@ -82,5 +82,5 @@
   # boot.resumeDevice = "/dev/disk/by-uuid/e8c93361-536b-47e6-beba-2a597d1b2a08";
 
   # For now, just use regular suspend on lid close
-  services.logind.lidSwitch = "suspend";
+  services.logind.settings.Login.HandleLidSwitch = "suspend";
 }

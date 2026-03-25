@@ -28,6 +28,7 @@ binds {
 	Mod+T { spawn "ghostty"; }
   Mod+B { spawn "brave"; }
 	Mod+A { spawn "rofi" "-show" "drun"; }
+  Mod+D { spawn "noctalia-shell" "ipc" "call" "launcher" "toggle"; }
   Mod+F { spawn "thunar"; }
   Mod+C { spawn "code"; }
   Mod+Backspace { spawn "noctalia-shell" "ipc" "call" "sessionMenu" "toggle"; }
@@ -112,7 +113,7 @@ binds {
 
   // Brightness Control
   XF86MonBrightnessDown { spawn "brightnessctl" "set" "5%-"; }
-  Xf86MonBrightnessUp { spawn "brightnessctl" "set" "+5%"; }
+  XF86MonBrightnessUp { spawn "brightnessctl" "set" "+5%"; }
 
   // Media Control
   XF86AudioPrev { spawn "playerctl" "previous"; }

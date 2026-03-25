@@ -6,8 +6,6 @@
     extraPackages = with pkgs; [
       intel-compute-runtime
       intel-media-driver    # Hardware Video Acceleration (Broadwell+)
-      intel-vaapi-driver    # Fallback for older chips
-      libvdpau-va-gl
     ];
   };
 

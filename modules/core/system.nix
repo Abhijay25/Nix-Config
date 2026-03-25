@@ -14,7 +14,6 @@
   };
 
   services.fwupd.enable = true;
-  services.thermald.enable = true;
   security.rtkit.enable = true;
 
   # Limit stored boot generations
