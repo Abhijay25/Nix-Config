@@ -10,7 +10,7 @@
       CPU_SCALING_GOVERNOR_ON_AC = "schedutil";
       CPU_SCALING_GOVERNOR_ON_BAT = "schedutil";
       CPU_BOOST_ON_AC = 1;
-      CPU_BOOST_ON_BAT = 0;
+      CPU_BOOST_ON_BAT = 1;
 
       # Charge thresholds to preserve battery health
       START_CHARGE_THRESH_BAT0 = 75;
@@ -39,8 +39,8 @@
   services.auto-cpufreq.enable = false;
   services.power-profiles-daemon.enable = false;
 
-  # Powertop
-  powerManagement.powertop.enable = true;
+  # Powertop auto-tune disabled — conflicts with TLP (overrides schedutil governor with powersave)
+  # powerManagement.powertop.enable = true;
 
   # Kill processes on critically low memory
   services.earlyoom = {
