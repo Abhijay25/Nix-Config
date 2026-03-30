@@ -7,3 +7,12 @@ result-*
 *.swo
 *~
 .DS_Store
+
+# Rust build artifacts
+pkgs/*/target/
+
+# Claude Code plugin data
+.remember/
+
+# Database files
+*.db
