@@ -24,6 +24,7 @@ struct WindowPosition {
 struct NiriContext {
     request_socket: Socket,
     tracked_window_positions: HashMap<u64, WindowPosition>,
+    workspace_column_counts: HashMap<u64, usize>,
 }
 
 impl NiriContext {
@@ -32,6 +33,7 @@ impl NiriContext {
         Ok(Self {
             request_socket,
             tracked_window_positions: HashMap::new(),
+            workspace_column_counts: HashMap::new(),
         })
     }
 
@@ -194,10 +196,14 @@ impl NiriContext {
         }
 
         let column_count = unique_columns.len();
+        let prev_column_count = self.workspace_column_counts.get(&ws_id).copied().unwrap_or(0);
+        self.workspace_column_counts.insert(ws_id, column_count);
 
         match column_count {
             0 => {}
             1 => {
+                // Maximize the sole column when going from 2→1 (one of a pair closed)
+                // or on initial sync. Skip if already maximized.
                 let win_id = tiled_windows[0].id;
                 if !self.is_maximized(win_id, state, windows_map) {
                     info!("workspace {}: single column -> maximizing window {}", ws_id, win_id);
@@ -205,10 +211,22 @@ impl NiriContext {
                 }
             }
             2 => {
+                // Only auto-resize to 50/50 when a new window joins a single
+                // maximized window (1→2). When coming from 3+ columns (e.g.
+                // closing a popup/zathura), keep existing sizes so manually
+                // resized windows are preserved.
+                if prev_column_count != 1 {
+                    debug!(
+                        "workspace {}: two columns but came from {} columns, keeping current sizes",
+                        ws_id, prev_column_count
+                    );
+                    return Ok(());
+                }
+
+                // Skip if both columns are already at ~50%
                 let mut cols_vec: Vec<usize> = unique_columns.into_iter().collect();
                 cols_vec.sort_unstable();
 
-                // Skip if both columns are already at ~50%
                 let already_correct = cols_vec.iter().all(|&col_idx| {
                     tiled_windows
                         .iter()
@@ -222,7 +240,7 @@ impl NiriContext {
                     return Ok(());
                 }
 
-                info!("workspace {}: two columns -> resizing both to 50%", ws_id);
+                info!("workspace {}: 1->2 columns -> resizing both to 50%", ws_id);
 
                 // Focus any window on this workspace to ensure we're on it,
                 // then navigate columns left-to-right setting each to 50%.

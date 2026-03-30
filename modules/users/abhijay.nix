@@ -25,10 +25,24 @@
         email = "163997617+Abhijay25@users.noreply.github.com";
       };
       init.defaultBranch = "main";
+      core.pager = "delta";
+      interactive.diffFilter = "delta --color-only";
+      delta = {
+        navigate = true;
+        syntax-theme = "tokyonight_night";
+        line-numbers = true;
+      };
+      merge.conflictstyle = "diff3";
+      diff.colorMoved = "default";
     };
   };
 
-  services.swaync.enable = true;
+  services.swaync = {
+    enable = true;
+    settings = {
+      focus-window = false;
+    };
+  };
   services.network-manager-applet.enable = true;
   services.gnome-keyring.enable = true;
 
@@ -95,45 +109,6 @@
     };
   };
 
-  # Pre-warm rofi (file cache + drun cache)
-  systemd.user.services.rofi-prewarm = {
-    Unit = {
-      Description = "Pre-warm rofi caches";
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.writeShellScript "rofi-prewarm" ''
-        # Wait for desktop to settle
-        sleep 2
-
-        # Generate file cache
-        ${pkgs.fd}/bin/fd --type f --hidden --max-depth 6 \
-          --exclude .git --exclude node_modules \
-          --exclude .cache --exclude .nix-defexpr --exclude .nix-profile \
-          --exclude .local/share --exclude .mozilla --exclude .cargo \
-          --base-directory "$HOME" > /tmp/rofi-file-cache 2>/dev/null
-
-        # Pre-warm rofi (launches and exits in ~100ms, barely visible)
-        ${pkgs.coreutils}/bin/timeout 0.1 ${pkgs.rofi}/bin/rofi -show drun || true
-      ''}";
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
-
-  systemd.user.timers.rofi-prewarm = {
-    Unit = {
-      Description = "Refresh rofi file cache periodically";
-    };
-    Timer = {
-      OnUnitActiveSec = "5m";
-    };
-    Install = {
-      WantedBy = [ "timers.target" ];
-    };
-  };
 
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     Unit = {
@@ -207,11 +182,17 @@
     };
   };
 
+  gtk.enable = true;
+  gtk.gtk4.theme = null;
+  gtk.iconTheme = {
+    name = "Papirus";
+    package = pkgs.papirus-icon-theme;
+  };
+
   # Config symlinks
   xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
-  xdg.configFile."rofi/config.rasi".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/rofi/config.rasi";
-  xdg.configFile."rofi/scripts".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/scripts";
+  xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/satty/config.toml";
   xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
 
   # XDG user directories
@@ -233,16 +214,18 @@
     nixpkgs-fmt
     nodejs
     polkit_gnome
-    rofi
     unzip
     zip
 
     # Terminal & NixOS
     btop
+    delta
     fd
     lazygit
     nh
     ripgrep
+    semgrep
+    tldr
 
     # Quality of Life
     brightnessctl
@@ -252,6 +235,7 @@
 
     # Utilities
     grim
+    satty
     slurp
     wl-clipboard
     zathura
@@ -259,6 +243,7 @@
     # Editor & Languages
     claude-code
     code-cursor
+    codex
     go
     gnumake
     nil
