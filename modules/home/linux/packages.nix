@@ -1,0 +1,52 @@
+{ pkgs, ... }: {
+  home.packages = with pkgs; [
+    # System
+    bluez
+    bluez-tools
+    gcc
+    polkit_gnome
+    engrampa
+
+    # Terminal
+    fastfetch
+
+    # Quality of Life
+    brightnessctl
+    libnotify
+    pamixer
+    playerctl
+
+    # Wayland Utilities
+    grim
+    satty
+    slurp
+    wl-clipboard
+
+    # Ricing & Themes
+    adwaita-icon-theme
+    swww
+    util-linux
+
+    # Applications
+    (chromium.override {
+      commandLineArgs = [
+        "--ozone-platform=wayland"
+        "--enable-features=UseOzonePlatform"
+      ];
+    })
+    localsend
+    telegram-desktop
+    vesktop
+    spotify
+
+    (brave.override {
+      commandLineArgs = [
+        "--enable-features=UseOzonePlatform"
+        "--ozone-platform=wayland"
+        "--enable-gpu-rasterization"
+        "--enable-zero-copy"
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization"
+      ];
+    })
+  ];
+}
