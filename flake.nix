@@ -1,11 +1,17 @@
 {
-  description = "NixOS on Thinkpad";
+  description = "NixOS + nix-darwin dotfiles";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-parts.url = "github:hercules-ci/flake-parts";
 
     home-manager = {
       url = "github:nix-community/home-manager/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -20,46 +26,38 @@
     };
 
     crane.url = "github:ipetkov/crane";
-
-    flake-parts.url = "github:hercules-ci/flake-parts";
-
-    nix-darwin = {
-      url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
   };
 
-  outputs = inputs @ {
-    nixpkgs,
-    home-manager,
-    crane,
-    ...
-  }: {
-    nixosConfigurations.doge = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        ./hardware-configuration.nix
-        ./modules
-        home-manager.nixosModules.home-manager
-        {
-          nixpkgs.overlays = [
-            (final: _: {
-              niri-autotile = final.callPackage ./pkgs/niri-autotile {
-                craneLib = crane.mkLib final;
+  outputs = inputs @ { flake-parts, ... }:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      # Declared for future perSystem outputs (devShells, packages, etc.)
+      systems = [ "x86_64-linux" "aarch64-darwin" ];
+
+      flake = {
+        nixosConfigurations.doge = inputs.nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./hosts/doge
+            inputs.home-manager.nixosModules.home-manager
+            {
+              nixpkgs.overlays = [
+                (final: _: {
+                  niri-autotile = final.callPackage ./pkgs/niri-autotile {
+                    craneLib = inputs.crane.mkLib final;
+                  };
+                })
+              ];
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs; };
+                users.abhijay = import ./modules/home/linux/abhijay.nix;
+                backupFileExtension = "backup";
               };
-            })
+            }
           ];
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            extraSpecialArgs = { inherit inputs; };
-            users.abhijay = import ./modules/users/abhijay.nix;
-            backupFileExtension = "backup";
-          };
-        }
-      ];
+        };
+      };
     };
-  };
 }
