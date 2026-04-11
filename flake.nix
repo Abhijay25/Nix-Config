@@ -21,6 +21,13 @@
 
     crane.url = "github:ipetkov/crane";
 
+    flake-parts.url = "github:hercules-ci/flake-parts";
+
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = inputs @ {
