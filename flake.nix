@@ -58,6 +58,24 @@
             }
           ];
         };
+
+        # Uncomment when Mac arrives. Set hostname to match `scutil --get LocalHostName`.
+        # darwinConfigurations.mac = inputs.nix-darwin.lib.darwinSystem {
+        #   specialArgs = { inherit inputs; };
+        #   modules = [
+        #     ./hosts/mac
+        #     inputs.home-manager.darwinModules.home-manager
+        #     {
+        #       home-manager = {
+        #         useGlobalPkgs = true;
+        #         useUserPackages = true;
+        #         extraSpecialArgs = { inherit inputs; };
+        #         users.abhijay = import ./modules/home/darwin/abhijay.nix;
+        #         backupFileExtension = "backup";
+        #       };
+        #     }
+        #   ];
+        # };
       };
     };
 }
