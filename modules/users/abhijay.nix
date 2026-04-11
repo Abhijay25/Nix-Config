@@ -84,7 +84,7 @@
       btw = "echo I use Nix btw";
       nrs = "sudo -v && nh os switch ~/dotfiles";
       flakeupdate = "~/dotfiles/scripts/update-flake.sh";
-      fastfetch = "/home/abhijay/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' /home/abhijay/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
+      fastfetch = "${config.home.homeDirectory}/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' ${config.home.homeDirectory}/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
       vpn = "nusvpn";
     };
   };
@@ -183,7 +183,6 @@
   };
 
   gtk.enable = true;
-  gtk.gtk4.theme = null;
   gtk.iconTheme = {
     name = "Papirus";
     package = pkgs.papirus-icon-theme;
@@ -214,6 +213,7 @@
     nixpkgs-fmt
     nodejs
     polkit_gnome
+    engrampa
     unzip
     zip
 
@@ -256,7 +256,6 @@
     # Ricing & Themes
     adwaita-icon-theme
     fastfetch
-    papirus-icon-theme
     swww
     util-linux
 
