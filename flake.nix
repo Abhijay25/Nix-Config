@@ -25,7 +25,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    crane.url = "github:ipetkov/crane";
   };
 
   outputs = inputs @ { flake-parts, ... }:
@@ -41,13 +40,6 @@
             ./hosts/doge
             inputs.home-manager.nixosModules.home-manager
             {
-              nixpkgs.overlays = [
-                (final: _: {
-                  niri-autotile = final.callPackage ./pkgs/niri-autotile {
-                    craneLib = inputs.crane.mkLib final;
-                  };
-                })
-              ];
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;

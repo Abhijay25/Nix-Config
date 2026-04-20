@@ -16,8 +16,7 @@
     ../../modules/nixos/hardware/power.nix
 
     # Desktop
-    ../../modules/nixos/desktop/niri.nix
-    ../../modules/nixos/desktop/niri-autotile.nix
+    ../../modules/nixos/desktop/hyprland.nix
     ../../modules/nixos/desktop/sddm.nix
     ../../modules/nixos/desktop/portal.nix
     ../../modules/nixos/desktop/theming.nix

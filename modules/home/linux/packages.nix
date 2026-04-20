@@ -4,7 +4,8 @@
     bluez
     bluez-tools
     gcc
-    polkit_gnome
+    hyprpolkitagent
+    hyprswitch
     engrampa
 
     # Terminal

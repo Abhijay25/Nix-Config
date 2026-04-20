@@ -36,13 +36,13 @@
 
   systemd.user.services.polkit-gnome-authentication-agent-1 = {
     Unit = {
-      Description = "polkit-gnome-authentication-agent-1";
+      Description = "hyprpolkitagent";
       Wants = [ "graphical-session.target" ];
       After = [ "graphical-session.target" ];
     };
     Service = {
       Type = "simple";
-      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      ExecStart = "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent";
       Restart = "on-failure";
       RestartSec = 1;
       TimeoutStopSec = 10;
@@ -53,7 +53,9 @@
   };
 
   # Config symlinks (mutable — editable without rebuilding)
-  xdg.configFile."niri/config.kdl".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/niri/config.kdl";
+  wayland.windowManager.hyprland.enable = true;
+
+  xdg.configFile."hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/hyprland/hyprland.conf";
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
   xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/satty/config.toml";
   xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
