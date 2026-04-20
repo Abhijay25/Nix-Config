@@ -5,7 +5,7 @@
     bluez-tools
     gcc
     hyprpolkitagent
-    hyprswitch
+    hyprshell
     engrampa
 
     # Terminal
