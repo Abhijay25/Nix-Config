@@ -19,7 +19,6 @@
     name = "Papirus";
     package = pkgs.papirus-icon-theme;
   };
-
   # Pre-load Ghostty terminal daemon
   systemd.user.services.ghostty = {
     Unit = {
