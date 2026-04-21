@@ -6,8 +6,8 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
-    max-jobs = 4;  # Build up to 4 packages in parallel
-    cores = 2;     # Each package can use up to 2 cores (4*2=8 total)
+    max-jobs = 8;  # One job per core — uses all 8 cores
+    cores = 1;     # Each job gets 1 core; avoids contention across parallel builds
 
     # Restrict nix operations to wheel group
     allowed-users = [ "@wheel" ];
@@ -34,7 +34,7 @@
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 14d";
-    persistent = false;
+    persistent = true;
   };
 
   system.stateVersion = "25.11";
