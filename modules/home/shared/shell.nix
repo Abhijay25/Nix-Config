@@ -38,7 +38,6 @@
     '';
 
     shellAliases = {
-      btw = "echo I use Nix btw";
       flakeupdate = "~/dotfiles/scripts/update-flake.sh";
     };
   };
