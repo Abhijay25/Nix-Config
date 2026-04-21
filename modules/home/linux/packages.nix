@@ -1,8 +1,6 @@
 { pkgs, ... }: {
   home.packages = with pkgs; [
     # System
-    bluez
-    bluez-tools
     gcc
     hyprpolkitagent
     hyprshell
@@ -24,9 +22,7 @@
     wl-clipboard
 
     # Ricing & Themes
-    adwaita-icon-theme
     swww
-    util-linux
 
     # Applications
     (chromium.override {
