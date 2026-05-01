@@ -12,6 +12,10 @@
       CPU_BOOST_ON_AC = 1;
       CPU_BOOST_ON_BAT = 1;
 
+      # Floor: ~1.2 GHz on AC (29% of 4.2 GHz), ~0.88 GHz on battery
+      CPU_MIN_PERF_ON_AC = 29;
+      CPU_MIN_PERF_ON_BAT = 21;
+
       # Charge thresholds to preserve battery health
       START_CHARGE_THRESH_BAT0 = 75;
       STOP_CHARGE_THRESH_BAT0 = 80;

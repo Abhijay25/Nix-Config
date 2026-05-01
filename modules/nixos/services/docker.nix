@@ -1,6 +1,7 @@
 { ... }: {
   virtualisation.docker = {
     enable = true;
+    enableOnBoot = false;
 
     # Fix: Docker IPs that don't conflict with NUS WiFi
     daemon.settings = {
