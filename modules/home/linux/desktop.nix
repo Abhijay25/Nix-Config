@@ -54,11 +54,11 @@
   # Config symlinks (mutable — editable without rebuilding)
   wayland.windowManager.hyprland = {
     enable = true;
-    extraConfig = "source = /home/abhijay/dotfiles/configs/hyprland/hyprland.conf";
+    extraConfig = "source = /home/abhijay/dotfiles/modules/home/shared/configs/hyprland/hyprland.conf";
   };
-  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
-  xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/satty/config.toml";
-  xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
+  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/ghostty/config";
+  xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/satty/config.toml";
+  xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/starship/starship.toml";
 
   xdg.userDirs.enable = true;
   xdg.userDirs.setSessionVariables = false;
@@ -70,7 +70,7 @@
   # Linux-specific aliases
   programs.zsh.shellAliases = {
     nrs = "sudo -v && nh os switch ~/dotfiles";
-    fastfetch = "${config.home.homeDirectory}/dotfiles/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' ${config.home.homeDirectory}/dotfiles/configs/brrtfetch/gifs/random/lizard.gif";
+    fastfetch = "${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' ${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/brrtfetch/gifs/random/lizard.gif";
     vpn = "nusvpn";
   };
 }
