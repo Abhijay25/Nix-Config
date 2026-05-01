@@ -36,10 +36,6 @@
       bindkey -r '^T'
       bindkey '^F' fzf-file-widget
     '';
-
-    shellAliases = {
-      flakeupdate = "~/dotfiles/scripts/update-flake.sh";
-    };
   };
 
   programs.starship = {

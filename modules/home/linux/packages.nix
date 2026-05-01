@@ -22,7 +22,7 @@
     wl-clipboard
 
     # Ricing & Themes
-    swww
+    awww
 
     # Applications
     (chromium.override {

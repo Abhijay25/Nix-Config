@@ -52,9 +52,10 @@
   };
 
   # Config symlinks (mutable — editable without rebuilding)
-  wayland.windowManager.hyprland.enable = true;
-
-  xdg.configFile."hypr/hyprland.conf".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/hyprland/hyprland.conf";
+  wayland.windowManager.hyprland = {
+    enable = true;
+    extraConfig = "source = /home/abhijay/dotfiles/configs/hyprland/hyprland.conf";
+  };
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/ghostty/config";
   xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/satty/config.toml";
   xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/configs/starship/starship.toml";
