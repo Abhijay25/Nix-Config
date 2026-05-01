@@ -16,6 +16,10 @@
       CPU_MIN_PERF_ON_AC = 30;
       CPU_MIN_PERF_ON_BAT = 25;
 
+      # Ramp up faster on AC, stay conservative on battery
+      CPU_ENERGY_PERF_POLICY_ON_AC = "balance_performance";
+      CPU_ENERGY_PERF_POLICY_ON_BAT = "balance_power";
+
       # Charge thresholds to preserve battery health
       START_CHARGE_THRESH_BAT0 = 75;
       STOP_CHARGE_THRESH_BAT0 = 80;
