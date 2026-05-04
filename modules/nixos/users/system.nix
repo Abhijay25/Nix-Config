@@ -8,7 +8,6 @@
       "wheel"
       "video"
       "audio"
-      "wireshark"
       "docker"
     ];
     packages = with pkgs; [
