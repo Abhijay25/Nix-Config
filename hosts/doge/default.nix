@@ -23,11 +23,13 @@
     ../../modules/nixos/desktop/keyring.nix
 
     # Programs
+    ../../modules/nixos/programs/nix-ld.nix
     ../../modules/nixos/programs/shell.nix
     ../../modules/nixos/programs/wireshark.nix
 
     # Services
     ../../modules/nixos/services/docker.nix
+    ../../modules/nixos/services/ollama.nix
 
     # Users
     ../../modules/nixos/users/system.nix
