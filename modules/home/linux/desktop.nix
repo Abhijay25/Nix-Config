@@ -11,6 +11,19 @@
     };
   };
 
+  services.hyprpaper = {
+    enable = true;
+    settings = {
+      wallpaper = [
+        {
+          monitor = "eDP-1";
+          path = "${../shared/wallpapers/Tiger.png}";
+        }
+      ];
+      splash = false;
+    };
+  };
+
   services.network-manager-applet.enable = true;
   services.gnome-keyring.enable = true;
 
@@ -18,6 +31,17 @@
   gtk.iconTheme = {
     name = "Papirus";
     package = pkgs.papirus-icon-theme;
+  };
+
+  home.pointerCursor = {
+    gtk.enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 22;
+    hyprcursor = {
+      enable = true;
+      size = 22;
+    };
   };
   # Pre-load Ghostty terminal daemon
   systemd.user.services.ghostty = {
@@ -54,6 +78,7 @@
   # Config symlinks (mutable — editable without rebuilding)
   wayland.windowManager.hyprland = {
     enable = true;
+    configType = "hyprlang";
     extraConfig = "source = /home/abhijay/dotfiles/modules/home/shared/configs/hyprland/hyprland.conf";
   };
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/ghostty/config";
