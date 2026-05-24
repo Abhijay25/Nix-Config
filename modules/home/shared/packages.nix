@@ -26,6 +26,7 @@
     typst
 
     # Coding
+    uv
     yarn
 
     # Utilities
