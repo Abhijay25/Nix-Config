@@ -16,4 +16,5 @@
   ];
 
   programs.noctalia-shell.enable = true;
+  home.enableNixpkgsReleaseCheck = false;
 }

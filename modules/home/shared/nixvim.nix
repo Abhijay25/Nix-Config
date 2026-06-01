@@ -13,6 +13,8 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    nixpkgs.source = inputs.nixpkgs;
+    version.enableNixpkgsReleaseCheck = false;
 
     # Colorscheme
     colorschemes.tokyonight = {
