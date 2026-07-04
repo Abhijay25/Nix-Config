@@ -15,6 +15,6 @@
     ./packages.nix
   ];
 
-  programs.noctalia-shell.enable = true;
+  programs.noctalia.enable = true;
   home.enableNixpkgsReleaseCheck = false;
 }

@@ -504,9 +504,9 @@
       illuminate.enable = true;
 
       # Colorizer (show colors inline for hex/rgb codes)
-      nvim-colorizer = {
+      colorizer = {
         enable = true;
-        userDefaultOptions = {
+        settings.user_default_options = {
           RGB = true;
           RRGGBB = true;
           names = false;
