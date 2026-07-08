@@ -5,6 +5,7 @@
     delta
     fd
     ffmpeg
+    gh
     lazygit
     nh
     nixpkgs-fmt
