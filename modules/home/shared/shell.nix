@@ -35,6 +35,18 @@
       # Move fzf file-search from Ctrl+T (taken by ghostty new-tab) to Ctrl+F
       bindkey -r '^T'
       bindkey '^F' fzf-file-widget
+      # Accept autosuggestions with Tab instead of right arrow;
+      # Tab falls back to completion when no suggestion is shown
+      ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(end-of-line vi-end-of-line vi-add-eol)
+      autosuggest-accept-or-complete() {
+        if [[ -n "$POSTDISPLAY" ]]; then
+          zle autosuggest-accept
+        else
+          zle expand-or-complete
+        fi
+      }
+      zle -N autosuggest-accept-or-complete
+      bindkey '^I' autosuggest-accept-or-complete
     '';
   };
 
