@@ -6,8 +6,8 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
-    max-jobs = 8;  # One job per core — uses all 8 cores
-    cores = 1;     # Each job gets 1 core; avoids contention across parallel builds
+    max-jobs = 2;  # At most 2 concurrent builds; big compiles dominate rebuilds
+    cores = 0;     # Each job may use all cores (0 = nproc) — a lone build gets -j8
 
     # Restrict nix operations to wheel group
     allowed-users = [ "@wheel" ];
