@@ -2,6 +2,23 @@
   # Allow proprietary packages
   nixpkgs.config.allowUnfree = true;
 
+  # Overlays
+  nixpkgs.overlays = [
+    # Fix qscintilla-qt6 build (pulled in by qgis): its .dist-info is named
+    # PyQt6_QScintilla, mismatching the derivation pname `qscintilla-qt6`, so
+    # pythonMetadataCheckPhase raises PackageNotFoundError. Upstream nixpkgs
+    # packaging bug; skip the metadata check until it is fixed upstream.
+    (final: prev: {
+      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+        (pyFinal: pyPrev: {
+          qscintilla-qt6 = pyPrev.qscintilla-qt6.overridePythonAttrs (_: {
+            dontCheckPythonMetadata = true;
+          });
+        })
+      ];
+    })
+  ];
+
   # Nix settings
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
