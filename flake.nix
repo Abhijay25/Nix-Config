@@ -3,6 +3,9 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Tracks nixpkgs solely to pull a fresher claude-code than the main pin.
+    # Bump with: nix flake update nixpkgs-claude
+    nixpkgs-claude.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     home-manager = {

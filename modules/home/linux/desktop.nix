@@ -94,7 +94,10 @@
 
   # Linux-specific aliases
   programs.zsh.shellAliases = {
-    nrs = "sudo -v && nh os switch ~/dotfiles";
+    # --no-nom: the interactive nix-output-monitor TUI is coupled to the
+    # controlling terminal, so switching ghostty tabs delivers a focus event
+    # that interrupts the build (SIGINT -> "interrupted by the user").
+    nrs = "sudo -v && nh os switch --no-nom ~/dotfiles";
     fastfetch = "${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/brrtfetch/brrtfetch -width 80 -height 60 -multiplier 2.5 -info 'fastfetch --logo-type none' ${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/brrtfetch/gifs/random/lizard.gif";
     vpn = "nusvpn";
   };

@@ -1,21 +1,16 @@
-{ ... }: {
+{ inputs, ... }: {
   # Allow proprietary packages
   nixpkgs.config.allowUnfree = true;
 
   # Overlays
   nixpkgs.overlays = [
-    # Fix qscintilla-qt6 build (pulled in by qgis): its .dist-info is named
-    # PyQt6_QScintilla, mismatching the derivation pname `qscintilla-qt6`, so
-    # pythonMetadataCheckPhase raises PackageNotFoundError. Upstream nixpkgs
-    # packaging bug; skip the metadata check until it is fixed upstream.
+    # Pull claude-code from a separately-tracked nixpkgs so it can be updated
+    # independently of the main pin (e.g. for new model support like Opus 5).
     (final: prev: {
-      pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-        (pyFinal: pyPrev: {
-          qscintilla-qt6 = pyPrev.qscintilla-qt6.overridePythonAttrs (_: {
-            dontCheckPythonMetadata = true;
-          });
-        })
-      ];
+      claude-code = (import inputs.nixpkgs-claude {
+        inherit (prev.stdenv.hostPlatform) system;
+        config.allowUnfree = true;
+      }).claude-code;
     })
   ];
 
