@@ -24,6 +24,7 @@
     # Ricing & Themes
 
     # Applications
+    qgis
     (chromium.override {
       commandLineArgs = [
         "--ozone-platform=wayland"
