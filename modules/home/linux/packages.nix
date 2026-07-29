@@ -35,14 +35,8 @@
     vesktop
     spotify
 
-    (brave.override {
-      commandLineArgs = [
-        "--enable-features=UseOzonePlatform"
-        "--ozone-platform=wayland"
-        "--enable-gpu-rasterization"
-        "--enable-zero-copy"
-        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization"
-      ];
-    })
+    # Wayland/ozone and VA-API flags are applied by the nixpkgs wrapper itself
+    # (driven by NIXOS_OZONE_WL), so no override is needed here.
+    brave
   ];
 }
