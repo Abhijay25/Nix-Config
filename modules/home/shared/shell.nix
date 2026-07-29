@@ -28,36 +28,14 @@
       fi
     '';
 
-    initContent = lib.mkMerge [
-      (lib.mkBefore ''
-        export ZSH_DISABLE_COMPFIX="true"
-        setopt AUTO_MENU
-        zstyle ':completion:*' menu select=2
-        zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-        # Must be set before zsh-autosuggestions is sourced (it reads this at source time).
-        ZSH_AUTOSUGGEST_ACCEPT_WIDGETS=(end-of-line vi-end-of-line vi-add-eol)
-      '')
-      ''
-        # Move fzf file-search from Ctrl+T (taken by ghostty new-tab) to Ctrl+F
-        bindkey -r '^T'
-        bindkey '^F' fzf-file-widget
-      ''
-      (lib.mkAfter ''
-        # Rebind Tab after fzf's zsh integration, which sources last and would
-        # otherwise leave '^I' bound to fzf-completion instead of our widget.
-        # zsh-autosuggestions rewraps whatever is bound to a key on the next
-        # precmd, so binding last here also makes it the widget autosuggestions wraps.
-        autosuggest-accept-or-complete() {
-          if [[ -n "$POSTDISPLAY" ]]; then
-            zle autosuggest-accept
-          else
-            zle expand-or-complete
-          fi
-        }
-        zle -N autosuggest-accept-or-complete
-        bindkey '^I' autosuggest-accept-or-complete
-      '')
-    ];
+    initContent = lib.mkBefore ''
+      export ZSH_DISABLE_COMPFIX="true"
+      zstyle ':completion:*' menu select
+      zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+      # Move fzf file-search from Ctrl+T (taken by ghostty new-tab) to Ctrl+F
+      bindkey -r '^T'
+      bindkey '^F' fzf-file-widget
+    '';
   };
 
   programs.starship = {
