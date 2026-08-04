@@ -78,8 +78,8 @@
   # Config symlinks (mutable — editable without rebuilding)
   wayland.windowManager.hyprland = {
     enable = true;
-    configType = "hyprlang";
-    extraConfig = "source = /home/abhijay/dotfiles/modules/home/shared/configs/hyprland/hyprland.conf";
+    configType = "lua";
+    extraConfig = ''dofile("/home/abhijay/dotfiles/modules/home/shared/configs/hyprland/hyprland.lua")'';
   };
   xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/ghostty/config";
   xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/satty/config.toml";
