@@ -1,4 +1,4 @@
-{ ... }: {
+{ config, ... }: {
   # Power management
   services.upower.enable = true;
 
@@ -71,6 +71,65 @@
 
   # ThinkPad-specific undervolting guard
   services.throttled.enable = true;
+
+  # The upstream default config sets PL1 (sustained) = 44 W with a 95 C trip temp on AC.
+  # The i7-8650U is a 15 W TDP part and the T480s chassis cannot dissipate 44 W sustained,
+  # so any load ramped to 44 W and heated until it hit the 95 C ceiling. Since throttled
+  # rewrites these MSRs every 5 s, nothing else could lower them.
+  #
+  # PL1 is the sustained limit (28 s window) — this is what governs steady-state temps.
+  # PL2 is the short burst limit, kept high so brief actions still boost to 4.2 GHz.
+  #
+  # Do NOT enable services.thermald alongside this: both write the same RAPL registers
+  # and will fight each other. thermald is fine with TLP, but not with throttled.
+  services.throttled.extraConfig = ''
+    [GENERAL]
+    Enabled: True
+    Sysfs_Power_Path: /sys/class/power_supply/AC*/online
+    Autoreload: True
+
+    [BATTERY]
+    Update_Rate_s: 30
+    PL1_Tdp_W: 12
+    PL1_Duration_s: 28
+    PL2_Tdp_W: 29
+    PL2_Duration_S: 0.002
+    Trip_Temp_C: 80
+    cTDP: 0
+    Disable_BDPROCHOT: False
+
+    [AC]
+    Update_Rate_s: 5
+    PL1_Tdp_W: 20
+    PL1_Duration_s: 28
+    PL2_Tdp_W: 40
+    PL2_Duration_S: 0.002
+    Trip_Temp_C: 80
+    cTDP: 0
+    Disable_BDPROCHOT: False
+
+    [UNDERVOLT.BATTERY]
+    CORE: 0
+    GPU: 0
+    CACHE: 0
+    UNCORE: 0
+    ANALOGIO: 0
+
+    [UNDERVOLT.AC]
+    CORE: 0
+    GPU: 0
+    CACHE: 0
+    UNCORE: 0
+    ANALOGIO: 0
+  '';
+
+  # The upstream NixOS module writes /etc/throttled.conf but adds no restartTriggers,
+  # so a config-only change leaves the daemon running with the old limits in memory.
+  # throttled's own Autoreload does not help: NixOS swaps the /etc symlink rather than
+  # modifying the file, so the inotify watch on the old inode never fires.
+  systemd.services.throttled.restartTriggers = [
+    config.environment.etc."throttled.conf".source
+  ];
 
   # Disable USB wake from suspend (prevents USB subsystem battery drain in S3)
   services.udev.extraRules = ''
