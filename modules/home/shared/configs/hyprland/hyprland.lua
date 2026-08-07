@@ -111,10 +111,11 @@ hl.bind(mainMod .. " + Backspace", hl.dsp.exec_cmd("noctalia msg panel-toggle se
 
 -- Screenshots
 -- --freeze grabs the frame before slurp takes its input grab, so hover menus and
--- other focus-sensitive popups survive into the shot. --cursor keeps the pointer.
-hl.bind("Print", hl.dsp.exec_cmd([[grimblast --freeze --cursor copy area]]))
-hl.bind("CTRL + Print", hl.dsp.exec_cmd([[GRIMBLAST_EDITOR="satty --filename" grimblast --freeze --cursor edit area]]))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd([[grimblast --freeze --cursor --notify copysave area ~/Pictures/Screenshot_$(date +'%Y-%m-%d_%H-%M-%S').png]]))
+-- other focus-sensitive popups survive into the shot. grimblast rejects --cursor
+-- on the `area` target, so the pointer is never drawn in these shots.
+hl.bind("Print", hl.dsp.exec_cmd([[grimblast --freeze copy area]]))
+hl.bind("CTRL + Print", hl.dsp.exec_cmd([[GRIMBLAST_EDITOR="satty --filename" grimblast --freeze edit area]]))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd([[grimblast --freeze --notify copysave area ~/Pictures/Screenshot_$(date +'%Y-%m-%d_%H-%M-%S').png]]))
 
 -- Focus (vim-style)
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
