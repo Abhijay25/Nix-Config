@@ -110,9 +110,11 @@ hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("code"))
 hl.bind(mainMod .. " + Backspace", hl.dsp.exec_cmd("noctalia msg panel-toggle session"))
 
 -- Screenshots
-hl.bind("Print", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
-hl.bind("CTRL + Print", hl.dsp.exec_cmd([[F=$(mktemp /tmp/screenshot-XXXXXX.png) && grim -g "$(slurp)" "$F" && satty -f "$F"; rm -f "$F"]]))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd([[F=~/Pictures/Screenshot_$(date +'%Y-%m-%d_%H-%M-%S').png && grim -g "$(slurp)" "$F" && wl-copy < "$F" && notify-send 'Screenshot saved' -t 2000]]))
+-- --freeze grabs the frame before slurp takes its input grab, so hover menus and
+-- other focus-sensitive popups survive into the shot. --cursor keeps the pointer.
+hl.bind("Print", hl.dsp.exec_cmd([[grimblast --freeze --cursor copy area]]))
+hl.bind("CTRL + Print", hl.dsp.exec_cmd([[GRIMBLAST_EDITOR="satty --filename" grimblast --freeze --cursor edit area]]))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd([[grimblast --freeze --cursor --notify copysave area ~/Pictures/Screenshot_$(date +'%Y-%m-%d_%H-%M-%S').png]]))
 
 -- Focus (vim-style)
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
