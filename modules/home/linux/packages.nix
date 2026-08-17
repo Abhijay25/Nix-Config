@@ -41,6 +41,7 @@
       ];
     })
     localsend
+    obsidian
     telegram-desktop
     vesktop
     spotify
