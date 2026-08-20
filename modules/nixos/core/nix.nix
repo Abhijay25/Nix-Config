@@ -49,6 +49,12 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
 
+    # Tolerate flaky links (phone hotspot). Without these a single failed
+    # lookup or stalled connection aborts the entire multi-GiB fetch.
+    download-attempts = 5;
+    connect-timeout = 10;
+    stalled-download-timeout = 90;
+    keep-going = true;  # Build unrelated derivations instead of stopping at the first failure
   };
 
   # Use batch scheduling for good balance between rebuild speed and system responsiveness
