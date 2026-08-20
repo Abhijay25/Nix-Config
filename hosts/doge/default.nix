@@ -25,6 +25,7 @@
     # Programs
     ../../modules/nixos/programs/nix-ld.nix
     ../../modules/nixos/programs/shell.nix
+    ../../modules/nixos/programs/screen-recorder.nix
     ../../modules/nixos/programs/wireshark.nix
 
     # Services
