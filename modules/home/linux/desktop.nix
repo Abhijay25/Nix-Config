@@ -22,7 +22,6 @@
   };
 
   services.network-manager-applet.enable = true;
-  services.gnome-keyring.enable = true;
 
   gtk.enable = true;
   gtk.iconTheme = {
@@ -77,11 +76,11 @@
   wayland.windowManager.hyprland = {
     enable = true;
     configType = "lua";
-    extraConfig = ''dofile("/home/abhijay/dotfiles/modules/home/shared/configs/hyprland/hyprland.lua")'';
+    extraConfig = ''dofile("${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/hyprland/hyprland.lua")'';
   };
-  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/ghostty/config";
-  xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/satty/config.toml";
-  xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "/home/abhijay/dotfiles/modules/home/shared/configs/starship/starship.toml";
+  xdg.configFile."ghostty/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/ghostty/config";
+  xdg.configFile."satty/config.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/satty/config.toml";
+  xdg.configFile."starship.toml".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/modules/home/shared/configs/starship/starship.toml";
 
   xdg.userDirs.enable = true;
   xdg.userDirs.setSessionVariables = false;
