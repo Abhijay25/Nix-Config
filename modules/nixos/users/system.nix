@@ -9,6 +9,7 @@
       "video"
       "audio"
       "docker"
+      "wireshark"  # dumpcap capture privileges without running the GUI as root
     ];
     packages = with pkgs; [
       tree
