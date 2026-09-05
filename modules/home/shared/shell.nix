@@ -94,7 +94,7 @@
     enableZshIntegration = true;
     shellWrapperName = "y";
     settings = {
-      manager = {
+      mgr = {
         ratio = [ 1 2 6 ];
         sort_by = "natural";
         sort_sensitive = false;
@@ -110,7 +110,7 @@
       };
     };
     keymap = {
-      manager.prepend_keymap = [
+      mgr.prepend_keymap = [
         { on = [ "q" ]; run = "quit"; desc = "Exit yazi"; }
         { on = [ "<Esc>" ]; run = "escape"; desc = "Cancel operation"; }
       ];
