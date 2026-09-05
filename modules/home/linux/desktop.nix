@@ -3,13 +3,10 @@
   pkgs,
   ...
 }: {
-  # Notification daemon
-  services.swaync = {
-    enable = true;
-    settings = {
-      focus-window = false;
-    };
-  };
+  # No separate notification daemon: noctalia-shell ships its own and takes
+  # org.freedesktop.Notifications on the user bus. Running swaync alongside it
+  # made swaync.service fail its D-Bus name grab on every login, which in turn
+  # made switch-to-configuration exit 4 and `nrs` report a failed rebuild.
 
   services.hyprpaper = {
     enable = true;
