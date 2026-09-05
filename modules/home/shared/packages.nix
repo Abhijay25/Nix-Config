@@ -8,7 +8,7 @@
     gh
     lazygit
     nh
-    nixpkgs-fmt
+    nixfmt
     nodejs
     ripgrep
     semgrep
