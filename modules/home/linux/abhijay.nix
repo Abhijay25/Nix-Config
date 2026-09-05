@@ -1,5 +1,6 @@
 {
   inputs,
+  pkgs,
   ...
 }: {
   home.username = "abhijay";
@@ -7,7 +8,6 @@
   home.stateVersion = "25.11";
 
   imports = [
-    inputs.noctalia.homeModules.default
     ../shared/shell.nix
     ../shared/packages.nix
     ../shared/nixvim.nix
@@ -15,6 +15,11 @@
     ./packages.nix
   ];
 
-  programs.noctalia.enable = true;
+  # home-manager now ships its own programs.noctalia module, so import only
+  # the package from the flake to stay on the upstream-tracking version.
+  programs.noctalia = {
+    enable = true;
+    package = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  };
   home.enableNixpkgsReleaseCheck = false;
 }

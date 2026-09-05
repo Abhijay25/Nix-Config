@@ -27,6 +27,7 @@
     typst
 
     # Coding
+    python3Packages.huggingface-hub
     uv
     yarn
 
