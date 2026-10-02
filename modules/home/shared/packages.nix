@@ -6,6 +6,7 @@
     fd
     ffmpeg
     gh
+    jq
     lazygit
     nh
     nixfmt
@@ -27,8 +28,11 @@
     typst
 
     # Coding
+    google-cloud-sdk
+    pnpm
     python3Packages.huggingface-hub
     uv
+    wrangler
     yarn
 
     # Utilities
