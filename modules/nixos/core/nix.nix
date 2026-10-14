@@ -26,17 +26,6 @@
         })
       ];
     })
-
-    # Fix typescript-language-server 6.0.2 pnpmDeps hash mismatch (pulled in by
-    # nixvim's ts_ls). Fixed on nixpkgs master (f2aca68) but not yet in
-    # nixos-unstable; drop this once nixos-unstable carries the new hash.
-    (final: prev: {
-      typescript-language-server = prev.typescript-language-server.overrideAttrs (old: {
-        pnpmDeps = old.pnpmDeps.overrideAttrs (_: {
-          outputHash = "sha256-xR/EF60lVBsITKgH7wCM2wHM46PFQevD51KfCENSUH4=";
-        });
-      });
-    })
   ];
 
   # Nix settings
