@@ -108,6 +108,9 @@ hl.bind(mainMod .. " + A", hl.dsp.exec_cmd("noctalia msg panel-toggle launcher")
 hl.bind(mainMod .. " + F", hl.dsp.exec_cmd("thunar"))
 hl.bind(mainMod .. " + C", hl.dsp.exec_cmd("code"))
 hl.bind(mainMod .. " + Backspace", hl.dsp.exec_cmd("noctalia msg panel-toggle session"))
+-- Start/stop screen recording. The same key does both: the script SIGINTs a
+-- running gpu-screen-recorder, which makes it finalise the mp4.
+hl.bind(mainMod .. " + R", hl.dsp.exec_cmd("gsr-toggle"))
 
 -- Screenshots
 -- --freeze grabs the frame before slurp takes its input grab, so hover menus and

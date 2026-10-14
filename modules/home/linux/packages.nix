@@ -5,6 +5,7 @@
     hyprpolkitagent
     hyprshell
     engrampa
+    libsecret
 
     # Terminal
     fastfetch
@@ -42,6 +43,49 @@
     })
     localsend
     obsidian
+
+    # SUPER+R toggle. gpu-screen-recorder finalises the mp4 on SIGINT, so the
+    # same key starts and stops. Unqualified on purpose: the binary must come
+    # from PATH so it resolves to the setcap wrapper that
+    # programs.gpu-screen-recorder installs, not the raw store path. Output goes
+    # to ~/Videos/Recordings to match the noctalia widget default, so both
+    # frontends drop files in the same place.
+    #
+    # The PID is tracked in a file rather than matched with pkill. The kernel
+    # truncates comm to 15 chars ("gpu-screen-reco"), so pkill -x on the real
+    # name silently matches nothing, and pkill -f would match any shell whose
+    # command line mentions the binary — including this script's own caller.
+    # $$ survives exec, so the pre-exec shell writes the PID the recorder ends
+    # up owning. This also leaves the noctalia widget's own recordings alone.
+    (pkgs.writeShellScriptBin "gsr-toggle" ''
+      pidfile="''${XDG_RUNTIME_DIR:-/tmp}/gsr-toggle.pid"
+
+      if [ -r "$pidfile" ]; then
+        pid=$(cat "$pidfile")
+        # Verify it is still our recorder before signalling: PIDs get reused.
+        if [ -n "$pid" ] && [ "$(cat /proc/"$pid"/comm 2>/dev/null)" = "gpu-screen-reco" ]; then
+          kill -INT "$pid"
+          rm -f "$pidfile"
+          ${pkgs.libnotify}/bin/notify-send "Screen Recorder" "Recording stopped"
+          exit 0
+        fi
+        rm -f "$pidfile"
+      fi
+
+      # "-w focused" needs an explicit -s WxH, so resolve the focused output to
+      # its name instead and let the recorder take the size from it.
+      monitor=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r \
+        'map(select(.focused)) | .[0].name // empty')
+      if [ -z "$monitor" ]; then
+        monitor=$(hyprctl monitors -j | ${pkgs.jq}/bin/jq -r '.[0].name')
+      fi
+
+      mkdir -p "$HOME/Videos/Recordings"
+      echo $$ > "$pidfile"
+      ${pkgs.libnotify}/bin/notify-send "Screen Recorder" "Recording started"
+      exec gpu-screen-recorder -w "$monitor" -f 60 -a default_output \
+        -o "$HOME/Videos/Recordings/recording-$(date +%F_%H-%M-%S).mp4"
+    '')
     telegram-desktop
     vesktop
     spotify
