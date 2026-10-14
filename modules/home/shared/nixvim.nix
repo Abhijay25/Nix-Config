@@ -284,7 +284,12 @@
           pyright.enable = true;
 
           # JavaScript/TypeScript
-          ts_ls.enable = true;
+          # Use the global pkgs so the hash-fix overlay in nixos/core/nix.nix
+          # applies (nixvim's own nixpkgs.source ignores system overlays).
+          ts_ls = {
+            enable = true;
+            package = pkgs.typescript-language-server;
+          };
 
           # C/C++
           clangd.enable = true;
