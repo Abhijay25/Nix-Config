@@ -12,7 +12,6 @@
     nixfmt
     nodejs
     ripgrep
-    semgrep
     tldr
     unzip
     zip
