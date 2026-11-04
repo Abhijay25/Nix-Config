@@ -9,7 +9,6 @@
 
   # Suppress boot messages
   boot.consoleLogLevel = 0;
-  boot.initrd.verbose = false;
   boot.kernelParams = [
     "quiet"
     "splash"

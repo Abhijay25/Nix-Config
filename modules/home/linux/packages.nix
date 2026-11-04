@@ -10,6 +10,9 @@
     # Terminal
     fastfetch
 
+    # Development
+    (callPackage ./daytona.nix {})
+
     # Quality of Life
     brightnessctl
     libnotify
