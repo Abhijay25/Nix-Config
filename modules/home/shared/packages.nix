@@ -10,7 +10,7 @@
     lazygit
     nh
     nixfmt
-    nodejs
+    nodejs_26
     ripgrep
     tldr
     unzip

@@ -12,6 +12,11 @@
 
     # Development
     (callPackage ./daytona.nix {})
+    # Analysis engines for REA (reverse engineering MCP for Codex).
+    ghidra
+    jadx
+    # REA's Ghidra provider requires java and javac on PATH (Ghidra 12 runs on JDK 21).
+    jdk21
 
     # Quality of Life
     brightnessctl
