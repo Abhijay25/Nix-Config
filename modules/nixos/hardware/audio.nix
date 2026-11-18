@@ -5,7 +5,6 @@
     pulse.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
-    jack.enable = true;
 
     # Low-latency config
     extraConfig.pipewire."92-low-latency" = {
@@ -37,4 +36,8 @@
       '')
     ];
   };
+
+  # JACK apps run through the wrapper (`pw-jack <app>`); jack.enable is
+  # deprecated because it sets a global LD_LIBRARY_PATH.
+  environment.systemPackages = [ pkgs.pipewire.jack ];
 }
